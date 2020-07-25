@@ -15,7 +15,7 @@ namespace Game1
         static void Main(string[] args)
         {
             var game = new NxSim();
-            if(args.Length > 0)
+            if (args.Length > 0)
             {
                 PipeClient pc = new PipeClient(args[0], game);
                 Thread t = new Thread(
@@ -23,7 +23,8 @@ namespace Game1
                 );
                 t.Start();
             }
-            game.Run();
+            using (game)
+                game.Run();
         }
     }
 }
