@@ -26,31 +26,31 @@ namespace Game1
         public Texture2D mailSprite;
         public Texture2D mailArmSprite;
 
-        public CharacterFrame(Dictionary<string, ComponentFrame> sprites, string animation, int frame)
+        public CharacterFrame(Animations animation, int frame)
         {
-            string bodyFrame = getFrameString(frame, animation, "body");
-            string armFrame = getFrameString(frame, animation, "arm");
-            string mailFrame = getFrameString(frame, animation, "mail");
-            string mailArmFrame = getFrameString(frame, animation, "mailArm");
+            var Arm = Skeleton.Arm[animation][frame];
+            var Body = Skeleton.Body[animation][frame];
+            var Mail = Skeleton.Mail[animation][frame];
+            var MailArm = Skeleton.MailArm[animation][frame];
 
-            armSprite = XmlLoader.sprites[armFrame].sprite;
-            bodySprite = XmlLoader.sprites[bodyFrame].sprite;
-            headSprite = XmlLoader.sprites["front.head"].sprite;
-            hairBelowSprite = XmlLoader.sprites["default.hairBelowBody"].sprite;
-            hairAboveSprite = XmlLoader.sprites["default.hairOverHead"].sprite;
-            faceSprite = XmlLoader.sprites["default.face"].sprite;
-            mailSprite = XmlLoader.sprites[mailFrame].sprite;
-            mailArmSprite = XmlLoader.sprites[mailArmFrame].sprite;
+            armSprite = Arm.sprite;
+            bodySprite = Body.sprite;
+            headSprite = XmlLoader.StaticSprites["front.head"].sprite;
+            hairBelowSprite = XmlLoader.StaticSprites["default.hairBelowBody"].sprite;
+            hairAboveSprite = XmlLoader.StaticSprites["default.hairOverHead"].sprite;
+            faceSprite = XmlLoader.StaticSprites["default.face"].sprite;
+            mailSprite = Mail.sprite;
+            mailArmSprite = MailArm.sprite;
 
 
-            hairBelowPos = new Vector2(100, 100) - (sprites["default.hairBelowBody"].origin + sprites["default.hairBelowBody"].brow - sprites["front.head"].brow + sprites["front.head"].neck - sprites[bodyFrame].neck);
-            bodyPos = new Vector2(100, 100) - sprites[bodyFrame].origin;
-            armPos = new Vector2(100, 100) - (sprites[armFrame].origin + sprites[armFrame].navel - sprites[bodyFrame].navel);
-            headPos = new Vector2(100, 100) - (sprites["front.head"].origin + sprites["front.head"].neck - sprites[bodyFrame].neck);
-            hairAbovePos = new Vector2(100, 100) - (sprites["default.hairOverHead"].origin + sprites["default.hairOverHead"].brow - sprites["front.head"].brow + sprites["front.head"].neck - sprites[bodyFrame].neck);
-            facePos = new Vector2(100, 100) - (sprites["default.face"].origin + sprites["default.face"].brow - sprites["front.head"].brow + sprites["front.head"].neck - sprites[bodyFrame].neck);
-            mailPos = new Vector2(100, 100) - (sprites[mailFrame].origin + sprites[mailFrame].navel - sprites[bodyFrame].navel);
-            mailArmPos = new Vector2(100, 100) - (sprites[mailArmFrame].origin + sprites[mailArmFrame].navel - sprites[mailFrame].navel + sprites[mailFrame].navel - sprites[bodyFrame].navel);
+            hairBelowPos = new Vector2(100, 100) - (XmlLoader.StaticSprites["default.hairBelowBody"].origin + XmlLoader.StaticSprites["default.hairBelowBody"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
+            bodyPos = new Vector2(100, 100) - Body.origin;
+            armPos = new Vector2(100, 100) - (Arm.origin + Arm.navel - Body.navel);
+            headPos = new Vector2(100, 100) - (XmlLoader.StaticSprites["front.head"].origin + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
+            hairAbovePos = new Vector2(100, 100) - (XmlLoader.StaticSprites["default.hairOverHead"].origin + XmlLoader.StaticSprites["default.hairOverHead"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
+            facePos = new Vector2(100, 100) - (XmlLoader.StaticSprites["default.face"].origin + XmlLoader.StaticSprites["default.face"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
+            mailPos = new Vector2(100, 100) - (Mail.origin + Mail.navel - Body.navel);
+            mailArmPos = new Vector2(100, 100) - (MailArm.origin + MailArm.navel - Mail.navel + Mail.navel - Body.navel);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -73,7 +73,8 @@ namespace Game1
 
     class CharacterModel
     {
-        private List<CharacterFrame> walk1 = new List<CharacterFrame>();
+        private Dictionary<Animations, List<CharacterFrame>> AnimationBooks = new Dictionary<Animations, List<CharacterFrame>>();
+        public Animations currentAnimation = Animations.Walk;
         TimeSpan timeIntoAnimation;
 
         TimeSpan Duration
@@ -81,12 +82,12 @@ namespace Game1
             get
             {
                 double totalSeconds = 0;
-                foreach(var frame in walk1)
+                foreach(var delay in Skeleton.Duration[currentAnimation])
                 {
-                    totalSeconds += .2;
+                    totalSeconds += delay;
                 }
 
-                return TimeSpan.FromSeconds(totalSeconds);
+                return TimeSpan.FromMilliseconds(totalSeconds);
             }
         }
 
@@ -96,37 +97,42 @@ namespace Game1
             {
                 CharacterFrame currentFrame = null;
                 TimeSpan accumulatedTime = new TimeSpan();
-                foreach (var frame in walk1)
+                for(int i = 0; i < AnimationBooks[currentAnimation].Count; i++)
                 {
-                    if (accumulatedTime + TimeSpan.FromSeconds(.2) >= timeIntoAnimation)
+                    var delay = TimeSpan.FromMilliseconds(Skeleton.Duration[currentAnimation][i]);
+                    if (accumulatedTime + delay >= timeIntoAnimation)
                     {
-                        currentFrame = frame;
+                        currentFrame = AnimationBooks[currentAnimation][i];
                         break;
                     }
                     else
                     {
-                        accumulatedTime += TimeSpan.FromSeconds(.2);
+                        accumulatedTime += delay;
                     }
                 }
                 if (currentFrame == null)
                 {
-                    currentFrame = walk1[0];
+                    currentFrame = AnimationBooks[currentAnimation][0];
                 }
                 return currentFrame;
             }
         }
 
-        public CharacterModel(Dictionary<string, ComponentFrame> sprites)
+        public CharacterModel()
         {
-            LoadAnimation(sprites, "walk1");
+            LoadAnimation(Animations.Idle);
+            LoadAnimation(Animations.Walk);
+            LoadAnimation(Animations.Alert);
         }
 
-        public void LoadAnimation(Dictionary<string, ComponentFrame> sprites, string animation)
+        public void LoadAnimation(Animations a)
         {
-            for(int i = 0; i < 4; i++)
+            List<CharacterFrame> AnimationBook = new List<CharacterFrame>();
+            for(int i = 0; i < Skeleton.GetAnimationLength(a); i++)
             {
-                walk1.Add(new CharacterFrame(sprites, animation, i));
+                AnimationBook.Add(new CharacterFrame(a, i));
             }
+            AnimationBooks.Add(a, AnimationBook);
         }
 
         public void Update(GameTime gameTime)

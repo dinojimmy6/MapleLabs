@@ -30,12 +30,13 @@ namespace Game1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            XmlLoader.MapStrings();
             XmlLoader.LoadXml(GraphicsDevice, "wz\\00002013.img.xml", "wz\\00002013.img\\");
             XmlLoader.LoadXml(GraphicsDevice, "wz\\LongCoat\\01053257.img.xml", "wz\\LongCoat\\01053257.img\\01053257.img\\");
             XmlLoader.LoadHeadXml(GraphicsDevice);
             XmlLoader.LoadHairXml(GraphicsDevice);
             XmlLoader.LoadFaceXml(GraphicsDevice);
-            chr = new CharacterModel(XmlLoader.sprites);
+            chr = new CharacterModel();
             base.Initialize();
         }
 
@@ -92,7 +93,7 @@ namespace Game1
 
         public void UpdateCharacter()
         {
-            chr = new CharacterModel(XmlLoader.sprites);
+            chr = new CharacterModel();
         }
     }
 }

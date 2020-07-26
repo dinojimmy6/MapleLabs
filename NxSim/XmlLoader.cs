@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -9,19 +10,59 @@ using System.Xml;
 
 namespace Game1
 {
+    public enum Animations
+    {
+        Default,
+        Idle,
+        Walk,
+        Alert,
+        Swing
+    }
+
+    class Skeleton
+    {
+        public static Dictionary<Animations, List<ComponentFrame>> Arm = new Dictionary<Animations, List<ComponentFrame>>();
+        public static Dictionary<Animations, List<ComponentFrame>> Body = new Dictionary<Animations, List<ComponentFrame>>();
+        public static Dictionary<Animations, List<ComponentFrame>> Mail = new Dictionary<Animations, List<ComponentFrame>>();
+        public static Dictionary<Animations, List<ComponentFrame>> MailArm = new Dictionary<Animations, List<ComponentFrame>>();
+        public static Dictionary<Animations, List<int>> Duration = new Dictionary<Animations, List<int>>();
+        public static void AddBook(string part, Animations A, List<ComponentFrame> Book)
+        {
+            switch (part)
+            {
+                case "arm":
+                    Arm[A] = Book;
+                    break;
+                case "body":
+                    Body[A] = Book;
+                    break;
+                case "mail":
+                    Mail[A] = Book;
+                    break;
+                case "mailArm":
+                    MailArm[A] = Book;
+                    break;
+            }
+        }
+
+        public static int GetAnimationLength(Animations A)
+        {
+            return Arm[A].Count;
+        }
+    }
+
     class XmlLoader
     {
-        public static Dictionary<string, ComponentFrame> sprites = new Dictionary<string, ComponentFrame>();
-
-        static HashSet<string> animations = new HashSet<string>{"walk1"};
-
+        public static Dictionary<string, ComponentFrame> StaticSprites = new Dictionary<string, ComponentFrame>();
+        public static Dictionary<string, Animations> AnimationStrings = new Dictionary<string, Animations>();
+        
         public static void LoadXml(GraphicsDevice gfxd, string xmlPath, string imgPath)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(xmlPath);
             foreach(XmlNode node in doc["imgdir"].ChildNodes)
             {
-                if(animations.Contains(node.Attributes["name"].Value))
+                if(AnimationStrings.ContainsKey(node.Attributes["name"].Value))
                 {
                     LoadAnimation(node, gfxd, imgPath);
                 }
@@ -54,7 +95,7 @@ namespace Game1
                     cf.brow = new Vector2(short.Parse(brow[0].Attributes["x"].Value), short.Parse(brow[0].Attributes["y"].Value));
                 }
             }
-            sprites[imgName] = cf;
+            StaticSprites[imgName] = cf;
         }
 
         public static void LoadHairXml(GraphicsDevice gfxd)
@@ -80,7 +121,7 @@ namespace Game1
                         cf.brow = new Vector2(short.Parse(brow[0].Attributes["x"].Value), short.Parse(brow[0].Attributes["y"].Value));
                     }
                 }
-                sprites[imgName] = cf;
+                StaticSprites[imgName] = cf;
             }
             
         }
@@ -108,7 +149,7 @@ namespace Game1
                         cf.brow = new Vector2(short.Parse(brow[0].Attributes["x"].Value), short.Parse(brow[0].Attributes["y"].Value));
                     }
                 }
-                sprites[imgName] = cf;
+                StaticSprites[imgName] = cf;
             }
             XmlNode blink = doc["imgdir"].SelectNodes("imgdir[@name='blink']")[0];
             foreach (XmlNode frame in blink.ChildNodes)
@@ -134,19 +175,34 @@ namespace Game1
                             cf.brow = new Vector2(short.Parse(brow[0].Attributes["x"].Value), short.Parse(brow[0].Attributes["y"].Value));
                         }
                     }
-                    sprites[keyName] = cf;
+                    StaticSprites[keyName] = cf;
                 }
             }
         }
 
+        public static void MapStrings()
+        {
+            AnimationStrings.Add("stand1", Animations.Idle);
+            AnimationStrings.Add("walk1", Animations.Walk);
+            AnimationStrings.Add("default", Animations.Default);
+            AnimationStrings.Add("alert", Animations.Alert);
+        }
+
         private static void LoadAnimation(XmlNode node, GraphicsDevice gfxd, string imgPath)
         {
+            Dictionary<string, List<ComponentFrame>> Books = new Dictionary<string, List<ComponentFrame>>();
+            Animations animation = AnimationStrings[node.Attributes["name"].Value];
+            List<int> delays = new List<int>();
             foreach (XmlNode frame in node.ChildNodes)
             {
                 string frameNum = frame.Attributes["name"].Value;
                 foreach (XmlNode component in frame.SelectNodes("canvas"))
                 {
                     string componentName = component.Attributes["name"].Value;
+                    if(!Books.ContainsKey(componentName))
+                    {
+                        Books.Add(componentName, new List<ComponentFrame>());
+                    }
                     string imgName = node.Attributes["name"].Value + "." + frameNum + "." + componentName;
                     short x  = short.Parse(component["vector"].Attributes["x"].Value);
                     short y = short.Parse(component["vector"].Attributes["y"].Value);
@@ -172,8 +228,20 @@ namespace Game1
                             cf.hand = new Vector2(short.Parse(hand[0].Attributes["x"].Value), short.Parse(hand[0].Attributes["y"].Value));
                         }
                     }
-                    sprites[imgName] = cf;
+                    Books[componentName].Add(cf);
                 }
+                if (node.SelectNodes("int[@name='delay']") != null && !Skeleton.Duration.ContainsKey(animation))
+                {
+                    delays.Add(Int32.Parse(frame.SelectNodes("int[@name='delay']")[0].Attributes["value"].Value));
+                }
+            }
+            foreach (KeyValuePair<string, List<ComponentFrame>> entry in Books)
+            {
+                Skeleton.AddBook(entry.Key, animation, entry.Value);
+            }
+            if (!Skeleton.Duration.ContainsKey(animation))
+            {
+                Skeleton.Duration[animation] = delays;
             }
         }
 
