@@ -21,6 +21,7 @@ namespace Game1
                 Thread t = new Thread(
                     new ParameterizedThreadStart(pc.Listen)
                 );
+                t.IsBackground = true;
                 t.Start();
             }
             using (game)

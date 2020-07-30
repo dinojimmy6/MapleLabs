@@ -30,11 +30,21 @@ namespace Game1
             {
                 ev.WaitOne();
                 string id = sr.ReadLine();
-                string xmlPath = "wz\\LongCoat\\" + id + ".img.xml";
-                string imgPath = "wz\\LongCoat\\" + id + ".img\\" + id + ".img\\";
-                XmlLoader.LoadXml(game.GraphicsDevice, xmlPath, imgPath);
+                EquipTypes et = EquipTypesExtension.GetEquipTypeFromId(id);
+                id = FormatId(id);
+                
+                XmlLoader.LoadXml(game.GraphicsDevice, et, id);
                 game.UpdateCharacter();
             }
+        }
+
+        private string FormatId(string id)
+        {
+            while(id.Length < 8)
+            {
+                id = "0" + id;
+            }
+            return id;
         }
     }
 }

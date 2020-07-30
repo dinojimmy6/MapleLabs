@@ -31,8 +31,9 @@ namespace Game1
         {
             // TODO: Add your initialization logic here
             XmlLoader.MapStrings();
-            XmlLoader.LoadXml(GraphicsDevice, "wz\\00002013.img.xml", "wz\\00002013.img\\");
-            XmlLoader.LoadXml(GraphicsDevice, "wz\\LongCoat\\01053257.img.xml", "wz\\LongCoat\\01053257.img\\01053257.img\\");
+            XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Invalid, "00002013");
+            XmlLoader.LoadXml(GraphicsDevice, EquipTypes.LongCoat, "01053104");
+            XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Shoes, "01073382");
             XmlLoader.LoadHeadXml(GraphicsDevice);
             XmlLoader.LoadHairXml(GraphicsDevice);
             XmlLoader.LoadFaceXml(GraphicsDevice);

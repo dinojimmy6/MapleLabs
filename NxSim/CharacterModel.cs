@@ -10,21 +10,27 @@ namespace Game1
     {
         public Vector2 armPos;
         public Vector2 bodyPos;
+        public Vector2 rHandPos;
+        public Vector2 lHandPos;
         public Vector2 headPos;
         public Vector2 hairBelowPos;
         public Vector2 hairAbovePos;
         public Vector2 facePos;
         public Vector2 mailPos;
         public Vector2 mailArmPos;
+        public Vector2 shoesPos;
 
         public Texture2D armSprite;
         public Texture2D bodySprite;
+        public Texture2D rHandSprite;
+        public Texture2D lHandSprite;
         public Texture2D headSprite;
         public Texture2D hairBelowSprite;
         public Texture2D hairAboveSprite;
         public Texture2D faceSprite;
         public Texture2D mailSprite;
         public Texture2D mailArmSprite;
+        public Texture2D shoesSprite;
 
         public CharacterFrame(Animations animation, int frame)
         {
@@ -35,6 +41,7 @@ namespace Game1
 
             armSprite = Arm.sprite;
             bodySprite = Body.sprite;
+            
             headSprite = XmlLoader.StaticSprites["front.head"].sprite;
             hairBelowSprite = XmlLoader.StaticSprites["default.hairBelowBody"].sprite;
             hairAboveSprite = XmlLoader.StaticSprites["default.hairOverHead"].sprite;
@@ -46,11 +53,32 @@ namespace Game1
             hairBelowPos = new Vector2(100, 100) - (XmlLoader.StaticSprites["default.hairBelowBody"].origin + XmlLoader.StaticSprites["default.hairBelowBody"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
             bodyPos = new Vector2(100, 100) - Body.origin;
             armPos = new Vector2(100, 100) - (Arm.origin + Arm.navel - Body.navel);
+            
             headPos = new Vector2(100, 100) - (XmlLoader.StaticSprites["front.head"].origin + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
             hairAbovePos = new Vector2(100, 100) - (XmlLoader.StaticSprites["default.hairOverHead"].origin + XmlLoader.StaticSprites["default.hairOverHead"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
             facePos = new Vector2(100, 100) - (XmlLoader.StaticSprites["default.face"].origin + XmlLoader.StaticSprites["default.face"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
             mailPos = new Vector2(100, 100) - (Mail.origin + Mail.navel - Body.navel);
             mailArmPos = new Vector2(100, 100) - (MailArm.origin + MailArm.navel - Mail.navel + Mail.navel - Body.navel);
+
+            if(Skeleton.RHand.ContainsKey(animation))
+            {
+                var RHand = Skeleton.RHand[animation] == null ? null : Skeleton.RHand[animation][frame];
+                rHandSprite = RHand.sprite;
+                rHandPos = new Vector2(100, 100) - (RHand.origin + RHand.navel - Body.navel);
+            }
+            if (Skeleton.LHand.ContainsKey(animation))
+            {
+                var LHand = Skeleton.LHand[animation] == null ? null : Skeleton.LHand[animation][frame];
+                lHandSprite = LHand.sprite;
+                lHandPos = new Vector2(100, 100) - (LHand.origin); //+ LHand.handMove - Body.navel);
+            }
+            if (Skeleton.Shoes.ContainsKey(animation))
+            {
+                var Shoes = Skeleton.Shoes[animation] == null ? null : Skeleton.Shoes[animation][frame];
+                shoesSprite = Shoes.sprite;
+                shoesPos = new Vector2(100, 100) - (Shoes.origin + Shoes.navel - Body.navel);
+            }
+
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -60,9 +88,21 @@ namespace Game1
             spriteBatch.Draw(mailSprite, mailPos, Color.White);
             spriteBatch.Draw(headSprite, headPos, Color.White);
             spriteBatch.Draw(armSprite, armPos, Color.White);
-            spriteBatch.Draw(mailArmSprite, mailArmPos, Color.White);
             spriteBatch.Draw(hairAboveSprite, hairAbovePos, Color.White);
+            spriteBatch.Draw(mailArmSprite, mailArmPos, Color.White);
             spriteBatch.Draw(faceSprite, facePos, Color.White);
+            if (rHandSprite != null)
+            {
+                spriteBatch.Draw(rHandSprite, rHandPos, Color.White);
+            }
+            if (lHandSprite != null)
+            {
+                spriteBatch.Draw(lHandSprite, lHandPos, Color.White);
+            }
+            if (shoesSprite != null)
+            {
+                spriteBatch.Draw(shoesSprite, shoesPos, Color.White);
+            }
         }
 
         private string getFrameString(int frame, string pre, string post)
@@ -122,6 +162,7 @@ namespace Game1
         {
             LoadAnimation(Animations.Idle);
             LoadAnimation(Animations.Walk);
+            LoadAnimation(Animations.Walk2);
             LoadAnimation(Animations.Alert);
         }
 

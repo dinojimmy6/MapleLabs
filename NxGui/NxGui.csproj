@@ -44,8 +44,14 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="TrieNet, Version=1.0.3.26316, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TrieNet.1.0.3.26316\lib\net461\TrieNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\EquipTypes.cs">
+      <Link>EquipTypes.cs</Link>
+    </Compile>
     <Compile Include="GuiForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,6 +73,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

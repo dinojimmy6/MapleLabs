@@ -1,11 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30320.27
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1145
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NxSim", "NxSim\NxSim.csproj", "{D304AEBB-E4BF-4873-9C55-E97F34D29CFC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NxGui", "NxGui\NxGui.csproj", "{A8D1B5E5-0CD0-4EA4-B52D-6209692CB4C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{4F13A1E1-0559-476C-9262-54A25A5CACE0}"
+	ProjectSection(SolutionItems) = preProject
+		EquipTypes.cs = EquipTypes.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

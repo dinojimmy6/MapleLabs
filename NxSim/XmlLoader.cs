@@ -15,6 +15,7 @@ namespace Game1
         Default,
         Idle,
         Walk,
+        Walk2,
         Alert,
         Swing
     }
@@ -23,8 +24,11 @@ namespace Game1
     {
         public static Dictionary<Animations, List<ComponentFrame>> Arm = new Dictionary<Animations, List<ComponentFrame>>();
         public static Dictionary<Animations, List<ComponentFrame>> Body = new Dictionary<Animations, List<ComponentFrame>>();
+        public static Dictionary<Animations, List<ComponentFrame>> RHand = new Dictionary<Animations, List<ComponentFrame>>();
+        public static Dictionary<Animations, List<ComponentFrame>> LHand = new Dictionary<Animations, List<ComponentFrame>>();
         public static Dictionary<Animations, List<ComponentFrame>> Mail = new Dictionary<Animations, List<ComponentFrame>>();
         public static Dictionary<Animations, List<ComponentFrame>> MailArm = new Dictionary<Animations, List<ComponentFrame>>();
+        public static Dictionary<Animations, List<ComponentFrame>> Shoes = new Dictionary<Animations, List<ComponentFrame>>();
         public static Dictionary<Animations, List<int>> Duration = new Dictionary<Animations, List<int>>();
         public static void AddBook(string part, Animations A, List<ComponentFrame> Book)
         {
@@ -36,12 +40,25 @@ namespace Game1
                 case "body":
                     Body[A] = Book;
                     break;
+                case "rHand":
+                    RHand[A] = Book;
+                    break;
+                case "lHand":
+                    LHand[A] = Book;
+                    break;
                 case "mail":
                     Mail[A] = Book;
                     break;
                 case "mailArm":
+                case "mailArm2":
+                case "mailArm3":
+                case "mailArmOverHair":
                     MailArm[A] = Book;
                     break;
+                case "shoes":
+                    Shoes[A] = Book;
+                    break;
+
             }
         }
 
@@ -56,15 +73,24 @@ namespace Game1
         public static Dictionary<string, ComponentFrame> StaticSprites = new Dictionary<string, ComponentFrame>();
         public static Dictionary<string, Animations> AnimationStrings = new Dictionary<string, Animations>();
         
-        public static void LoadXml(GraphicsDevice gfxd, string xmlPath, string imgPath)
+        public static void LoadXml(GraphicsDevice gfxd, EquipTypes et, string id)
         {
+            string xmlPath;
+            if (et == EquipTypes.Invalid)
+            {
+                xmlPath = "wz\\" + id + ".img.xml";
+            }
+            else
+            {
+                xmlPath = "wz\\" + et + "\\" + id + ".img.xml";
+            }
             XmlDocument doc = new XmlDocument();
             doc.Load(xmlPath);
             foreach(XmlNode node in doc["imgdir"].ChildNodes)
             {
                 if(AnimationStrings.ContainsKey(node.Attributes["name"].Value))
                 {
-                    LoadAnimation(node, gfxd, imgPath);
+                    LoadAnimation(node, gfxd, et, id);
                 }
             }
             
@@ -184,12 +210,22 @@ namespace Game1
         {
             AnimationStrings.Add("stand1", Animations.Idle);
             AnimationStrings.Add("walk1", Animations.Walk);
+            AnimationStrings.Add("walk2", Animations.Walk2);
             AnimationStrings.Add("default", Animations.Default);
             AnimationStrings.Add("alert", Animations.Alert);
         }
 
-        private static void LoadAnimation(XmlNode node, GraphicsDevice gfxd, string imgPath)
+        private static void LoadAnimation(XmlNode node, GraphicsDevice gfxd, EquipTypes et, string id)
         {
+            string imgPath;
+            if (et == EquipTypes.Invalid)
+            {
+                imgPath = "wz\\" + id + ".img\\";
+            }
+            else
+            {
+                imgPath = "wz\\" + et + "\\" + id + ".img\\" + id + ".img\\";
+            }
             Dictionary<string, List<ComponentFrame>> Books = new Dictionary<string, List<ComponentFrame>>();
             Animations animation = AnimationStrings[node.Attributes["name"].Value];
             List<int> delays = new List<int>();
@@ -203,7 +239,14 @@ namespace Game1
                     {
                         Books.Add(componentName, new List<ComponentFrame>());
                     }
-                    string imgName = node.Attributes["name"].Value + "." + frameNum + "." + componentName;
+                    string imgName = ResolveInLink(component);
+                    string outLink = ResolveOutLink(component);
+                    if(outLink != null)
+                    {
+                        imgPath = "wz\\" + et + "\\" + outLink.Split('\\')[0] + "\\";
+                        imgName = outLink;
+                    }
+                    imgName = imgName == null ? node.Attributes["name"].Value + "." + frameNum + "." + componentName : imgName;
                     short x  = short.Parse(component["vector"].Attributes["x"].Value);
                     short y = short.Parse(component["vector"].Attributes["y"].Value);
                     FileStream fileStream = new FileStream(imgPath + imgName + ".png", FileMode.Open);
@@ -227,6 +270,11 @@ namespace Game1
                         {
                             cf.hand = new Vector2(short.Parse(hand[0].Attributes["x"].Value), short.Parse(hand[0].Attributes["y"].Value));
                         }
+                        XmlNodeList handMove = mapNodes[0].SelectNodes("vector[@name='handMove']");
+                        if (handMove.Count == 1)
+                        {
+                            cf.handMove = new Vector2(short.Parse(handMove[0].Attributes["x"].Value), short.Parse(handMove[0].Attributes["y"].Value));
+                        }
                     }
                     Books[componentName].Add(cf);
                 }
@@ -247,10 +295,21 @@ namespace Game1
 
         private static string ResolveInLink(XmlNode node)
         {
-            XmlNodeList inLink = node.SelectNodes("imgdir[@name='_inlink']");
+            XmlNodeList inLink = node.SelectNodes("string[@name='_inlink']");
             if(inLink.Count > 0)
             {
                 return inLink[0].Attributes["value"].Value.Replace('/', '.');
+            }
+            return null;
+        }
+
+        private static string ResolveOutLink(XmlNode node)
+        {
+            XmlNodeList inLink = node.SelectNodes("string[@name='_outlink']");
+            if (inLink.Count > 0)
+            {
+                string[] sp = inLink[0].Attributes["value"].Value.Split('/');
+                return sp[2] + "\\" + sp[3] + "." + sp[4] + "." + sp[5];
             }
             return null;
         }
@@ -263,6 +322,7 @@ namespace Game1
         public Vector2 neck;
         public Vector2 navel;
         public Vector2 hand;
+        public Vector2 handMove;
         public Vector2 brow;
 
         public ComponentFrame(Texture2D _sprite, Vector2 origin)
