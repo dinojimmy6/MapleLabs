@@ -6,7 +6,7 @@ public enum EquipTypes
     Shoes = 107,
     Cape = 110,
     LongCoat = 105,
-    Gloves = 108
+    Glove = 108
 }
 
 public static class EquipTypesExtension

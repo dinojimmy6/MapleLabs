@@ -59,7 +59,7 @@ namespace WindowsFormsApp1
 
         private void FilterGloves_CheckedChanged(object sender, EventArgs e)
         {
-            HandleFilterEvent(EquipTypes.Gloves, FilterGloves.Checked);
+            HandleFilterEvent(EquipTypes.Glove, FilterGloves.Checked);
         }
 
         private void FilterCape_CheckedChanged(object sender, EventArgs e)

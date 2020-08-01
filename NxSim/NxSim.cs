@@ -34,6 +34,7 @@ namespace Game1
             XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Invalid, "00002013");
             XmlLoader.LoadXml(GraphicsDevice, EquipTypes.LongCoat, "01050045");
             XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Shoes, "01073382");
+            XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Glove, "01082223");
             XmlLoader.LoadHeadXml(GraphicsDevice);
             XmlLoader.LoadHairXml(GraphicsDevice);
             XmlLoader.LoadFaceXml(GraphicsDevice);

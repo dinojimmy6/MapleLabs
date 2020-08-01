@@ -31,6 +31,8 @@ namespace Game1
             Sk.Add("body", new Dictionary<Animations, List<ComponentFrame>>());
             Sk.Add("rHand", new Dictionary<Animations, List<ComponentFrame>>());
             Sk.Add("lHand", new Dictionary<Animations, List<ComponentFrame>>());
+            Sk.Add("rGlove", new Dictionary<Animations, List<ComponentFrame>>());
+            Sk.Add("lGlove", new Dictionary<Animations, List<ComponentFrame>>());
             Sk.Add("mail", new Dictionary<Animations, List<ComponentFrame>>());
             var MailArm = new Dictionary<Animations, List<ComponentFrame>>();
             Sk.Add("mailArm", MailArm);
@@ -304,10 +306,9 @@ namespace Game1
             return null;
         }
 
-        private static bool ResolveUol(XmlNode node, Dictionary<string, List<ComponentFrame>> books)
+        private static void ResolveUol(XmlNode node, Dictionary<string, List<ComponentFrame>> books)
         {
-            XmlNode uol = node["uol"];
-            if(uol != null)
+            foreach (XmlNode uol in node.SelectNodes("uol"))
             {
                 string componentName = uol.Attributes["name"].Value;
                 if (!books.ContainsKey(componentName))
@@ -320,13 +321,12 @@ namespace Game1
                     if(AnimationStrings.ContainsKey(s))
                     {
                         books[componentName].Add(Skeleton.Sk[strings[4]][AnimationStrings[s]][Int32.Parse(strings[3])]);
-                        return true;
+                        goto eol;
                     }
                 }
                 books[strings[2]].Add(books[strings[2]][Int32.Parse(strings[1])]);
-                return true;
+                eol: { }
             }
-            return false;
         }
     }
 
