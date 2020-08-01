@@ -32,7 +32,7 @@ namespace Game1
             // TODO: Add your initialization logic here
             XmlLoader.MapStrings();
             XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Invalid, "00002013");
-            XmlLoader.LoadXml(GraphicsDevice, EquipTypes.LongCoat, "01053104");
+            XmlLoader.LoadXml(GraphicsDevice, EquipTypes.LongCoat, "01050045");
             XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Shoes, "01073382");
             XmlLoader.LoadHeadXml(GraphicsDevice);
             XmlLoader.LoadHairXml(GraphicsDevice);

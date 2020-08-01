@@ -34,10 +34,10 @@ namespace Game1
 
         public CharacterFrame(Animations animation, int frame)
         {
-            var Arm = Skeleton.Arm[animation][frame];
-            var Body = Skeleton.Body[animation][frame];
-            var Mail = Skeleton.Mail[animation][frame];
-            var MailArm = Skeleton.MailArm[animation][frame];
+            var Arm = Skeleton.Sk["arm"][animation][frame];
+            var Body = Skeleton.Sk["body"][animation][frame];
+            var Mail = Skeleton.Sk["mail"][animation][frame];
+            var MailArm = Skeleton.Sk["mailArm"][animation][frame];
 
             armSprite = Arm.sprite;
             bodySprite = Body.sprite;
@@ -60,21 +60,21 @@ namespace Game1
             mailPos = new Vector2(100, 100) - (Mail.origin + Mail.navel - Body.navel);
             mailArmPos = new Vector2(100, 100) - (MailArm.origin + MailArm.navel - Mail.navel + Mail.navel - Body.navel);
 
-            if(Skeleton.RHand.ContainsKey(animation))
+            if(Skeleton.Sk["rHand"].ContainsKey(animation))
             {
-                var RHand = Skeleton.RHand[animation] == null ? null : Skeleton.RHand[animation][frame];
+                var RHand = Skeleton.Sk["rHand"][animation] == null ? null : Skeleton.Sk["rHand"][animation][frame];
                 rHandSprite = RHand.sprite;
                 rHandPos = new Vector2(100, 100) - (RHand.origin + RHand.navel - Body.navel);
             }
-            if (Skeleton.LHand.ContainsKey(animation))
+            if (Skeleton.Sk["lHand"].ContainsKey(animation))
             {
-                var LHand = Skeleton.LHand[animation] == null ? null : Skeleton.LHand[animation][frame];
+                var LHand = Skeleton.Sk["lHand"][animation] == null ? null : Skeleton.Sk["lHand"][animation][frame];
                 lHandSprite = LHand.sprite;
                 lHandPos = new Vector2(100, 100) - (LHand.origin); //+ LHand.handMove - Body.navel);
             }
-            if (Skeleton.Shoes.ContainsKey(animation))
+            if (Skeleton.Sk["shoes"].ContainsKey(animation))
             {
-                var Shoes = Skeleton.Shoes[animation] == null ? null : Skeleton.Shoes[animation][frame];
+                var Shoes = Skeleton.Sk["shoes"][animation] == null ? null : Skeleton.Sk["shoes"][animation][frame];
                 shoesSprite = Shoes.sprite;
                 shoesPos = new Vector2(100, 100) - (Shoes.origin + Shoes.navel - Body.navel);
             }

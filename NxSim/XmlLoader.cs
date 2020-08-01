@@ -22,49 +22,36 @@ namespace Game1
 
     class Skeleton
     {
-        public static Dictionary<Animations, List<ComponentFrame>> Arm = new Dictionary<Animations, List<ComponentFrame>>();
-        public static Dictionary<Animations, List<ComponentFrame>> Body = new Dictionary<Animations, List<ComponentFrame>>();
-        public static Dictionary<Animations, List<ComponentFrame>> RHand = new Dictionary<Animations, List<ComponentFrame>>();
-        public static Dictionary<Animations, List<ComponentFrame>> LHand = new Dictionary<Animations, List<ComponentFrame>>();
-        public static Dictionary<Animations, List<ComponentFrame>> Mail = new Dictionary<Animations, List<ComponentFrame>>();
-        public static Dictionary<Animations, List<ComponentFrame>> MailArm = new Dictionary<Animations, List<ComponentFrame>>();
-        public static Dictionary<Animations, List<ComponentFrame>> Shoes = new Dictionary<Animations, List<ComponentFrame>>();
+        public static Dictionary<string, Dictionary<Animations, List<ComponentFrame>>> Sk = new Dictionary<string, Dictionary<Animations, List<ComponentFrame>>>();
         public static Dictionary<Animations, List<int>> Duration = new Dictionary<Animations, List<int>>();
+
+        static Skeleton()
+        {
+            Sk.Add("arm", new Dictionary<Animations, List<ComponentFrame>>());
+            Sk.Add("body", new Dictionary<Animations, List<ComponentFrame>>());
+            Sk.Add("rHand", new Dictionary<Animations, List<ComponentFrame>>());
+            Sk.Add("lHand", new Dictionary<Animations, List<ComponentFrame>>());
+            Sk.Add("mail", new Dictionary<Animations, List<ComponentFrame>>());
+            var MailArm = new Dictionary<Animations, List<ComponentFrame>>();
+            Sk.Add("mailArm", MailArm);
+            Sk.Add("mailArm2", MailArm);
+            Sk.Add("mailArm3", MailArm);
+            Sk.Add("mailArmOverHair", MailArm);
+            Sk.Add("shoes", new Dictionary<Animations, List<ComponentFrame>>());
+        }
+
         public static void AddBook(string part, Animations A, List<ComponentFrame> Book)
         {
-            switch (part)
+            if(Sk.ContainsKey(part))
             {
-                case "arm":
-                    Arm[A] = Book;
-                    break;
-                case "body":
-                    Body[A] = Book;
-                    break;
-                case "rHand":
-                    RHand[A] = Book;
-                    break;
-                case "lHand":
-                    LHand[A] = Book;
-                    break;
-                case "mail":
-                    Mail[A] = Book;
-                    break;
-                case "mailArm":
-                case "mailArm2":
-                case "mailArm3":
-                case "mailArmOverHair":
-                    MailArm[A] = Book;
-                    break;
-                case "shoes":
-                    Shoes[A] = Book;
-                    break;
-
+                Sk[part][A] = Book;
             }
+            
         }
 
         public static int GetAnimationLength(Animations A)
         {
-            return Arm[A].Count;
+            return Sk["arm"][A].Count;
         }
     }
 
@@ -240,7 +227,8 @@ namespace Game1
                         Books.Add(componentName, new List<ComponentFrame>());
                     }
                     string imgName = ResolveInLink(component);
-                    string outLink = ResolveOutLink(component);
+                    string outLink = ResolveOutLink(component); 
+                    string origImgPath = imgPath;
                     if(outLink != null)
                     {
                         imgPath = "wz\\" + et + "\\" + outLink.Split('\\')[0] + "\\";
@@ -252,6 +240,7 @@ namespace Game1
                     FileStream fileStream = new FileStream(imgPath + imgName + ".png", FileMode.Open);
                     ComponentFrame cf = new ComponentFrame(Texture2D.FromStream(gfxd, fileStream), new Vector2(x, y));
                     fileStream.Dispose();
+                    imgPath = origImgPath;
                     XmlNodeList mapNodes = component.SelectNodes("imgdir[@name='map']");
                     if(mapNodes.Count == 1)
                     {
@@ -278,6 +267,7 @@ namespace Game1
                     }
                     Books[componentName].Add(cf);
                 }
+                ResolveUol(frame, Books);
                 if (node.SelectNodes("int[@name='delay']") != null && !Skeleton.Duration.ContainsKey(animation))
                 {
                     delays.Add(Int32.Parse(frame.SelectNodes("int[@name='delay']")[0].Attributes["value"].Value));
@@ -306,12 +296,37 @@ namespace Game1
         private static string ResolveOutLink(XmlNode node)
         {
             XmlNodeList inLink = node.SelectNodes("string[@name='_outlink']");
-            if (inLink.Count > 0)
+            if(inLink.Count > 0)
             {
                 string[] sp = inLink[0].Attributes["value"].Value.Split('/');
                 return sp[2] + "\\" + sp[3] + "." + sp[4] + "." + sp[5];
             }
             return null;
+        }
+
+        private static bool ResolveUol(XmlNode node, Dictionary<string, List<ComponentFrame>> books)
+        {
+            XmlNode uol = node["uol"];
+            if(uol != null)
+            {
+                string componentName = uol.Attributes["name"].Value;
+                if (!books.ContainsKey(componentName))
+                {
+                    books.Add(componentName, new List<ComponentFrame>());
+                }
+                string[] strings = uol.Attributes["value"].Value.Split('/');
+                string target = strings[2];
+                foreach(string s in strings) {
+                    if(AnimationStrings.ContainsKey(s))
+                    {
+                        books[componentName].Add(Skeleton.Sk[strings[4]][AnimationStrings[s]][Int32.Parse(strings[3])]);
+                        return true;
+                    }
+                }
+                books[strings[2]].Add(books[strings[2]][Int32.Parse(strings[1])]);
+                return true;
+            }
+            return false;
         }
     }
 
