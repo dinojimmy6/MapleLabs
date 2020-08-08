@@ -45,8 +45,10 @@
     <Compile Include="..\EquipTypes.cs">
       <Link>EquipTypes.cs</Link>
     </Compile>
+    <Compile Include="Camera.cs" />
     <Compile Include="CharacterModel.cs" />
-    <Compile Include="Class1.cs" />
+    <Compile Include="CharacterState.cs" />
+    <Compile Include="Character.cs" />
     <Compile Include="PipeClient.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

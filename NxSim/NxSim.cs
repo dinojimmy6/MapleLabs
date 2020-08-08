@@ -12,7 +12,8 @@ namespace Game1
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        CharacterModel chr;
+        Character Character;
+        Camera Camera;
 
         public NxSim()
         {
@@ -37,7 +38,8 @@ namespace Game1
             XmlLoader.LoadHeadXml(GraphicsDevice);
             XmlLoader.LoadHairXml(GraphicsDevice);
             XmlLoader.LoadFaceXml(GraphicsDevice);
-            chr = new CharacterModel();
+            Character = new Character();
+            Camera = new Camera();
             base.Initialize();
         }
 
@@ -73,7 +75,8 @@ namespace Game1
                 Exit();
 
             // TODO: Add your update logic here
-            chr.Update(gameTime);
+            Character.HandleInput(Keyboard.GetState());
+            Character.Update(gameTime, Keyboard.GetState());
             base.Update(gameTime);
         }
 
@@ -86,15 +89,20 @@ namespace Game1
             GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
-            chr.CurrentFrame.Draw(spriteBatch);
+            spriteBatch.Begin(SpriteSortMode.BackToFront,
+                        BlendState.AlphaBlend,
+                        null,
+                        null,
+                        null,
+                        null, Camera.Transform);
+            Character.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
 
         public void UpdateCharacter()
         {
-            chr = new CharacterModel();
+            Character.UpdateModel();
         }
     }
 }

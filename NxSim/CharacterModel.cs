@@ -81,28 +81,35 @@ namespace Game1
 
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, bool facingRight)
         {
-            spriteBatch.Draw(hairBelowSprite, hairBelowPos, Color.White);
-            spriteBatch.Draw(bodySprite, bodyPos, Color.White);
-            spriteBatch.Draw(mailSprite, mailPos, Color.White);
-            spriteBatch.Draw(headSprite, headPos, Color.White);
-            spriteBatch.Draw(armSprite, armPos, Color.White);
-            spriteBatch.Draw(hairAboveSprite, hairAbovePos, Color.White);
-            spriteBatch.Draw(mailArmSprite, mailArmPos, Color.White);
-            spriteBatch.Draw(faceSprite, facePos, Color.White);
+            SpriteEffects flip = facingRight ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            DrawPart(spriteBatch, hairBelowSprite, hairBelowPos, flip);
+            DrawPart(spriteBatch, bodySprite, bodyPos, flip);
+            DrawPart(spriteBatch, mailSprite, mailPos, flip);
+            DrawPart(spriteBatch, headSprite, headPos, flip);
+            DrawPart(spriteBatch, armSprite, armPos, flip);
+            DrawPart(spriteBatch, hairAboveSprite, hairAbovePos, flip);
+            DrawPart(spriteBatch, mailArmSprite, mailArmPos, flip);
+            DrawPart(spriteBatch, faceSprite, facePos, flip);
             if (rHandSprite != null)
             {
-                spriteBatch.Draw(rHandSprite, rHandPos, Color.White);
+                DrawPart(spriteBatch, rHandSprite, rHandPos, flip);
             }
             if (lHandSprite != null)
             {
-                spriteBatch.Draw(lHandSprite, lHandPos, Color.White);
+                DrawPart(spriteBatch, lHandSprite, lHandPos, flip);
             }
             if (shoesSprite != null)
             {
-                spriteBatch.Draw(shoesSprite, shoesPos, Color.White);
+                DrawPart(spriteBatch, shoesSprite, shoesPos, flip);
             }
+        }
+
+        public void DrawPart(SpriteBatch spriteBatch, Texture2D sprite, Vector2 pos, SpriteEffects flip)
+        {
+            Rectangle destRect = new Rectangle((int) pos.X, (int) pos.Y, sprite.Width, sprite.Height);
+            spriteBatch.Draw(sprite, destRect, null, Color.White, 0f, new Vector2(0, 0), flip, 0f);
         }
 
         private string getFrameString(int frame, string pre, string post)
@@ -181,6 +188,11 @@ namespace Game1
             double secondsIntoAnimation = timeIntoAnimation.TotalSeconds + gameTime.ElapsedGameTime.TotalSeconds;
             double remainder = secondsIntoAnimation % Duration.TotalSeconds;
             timeIntoAnimation = TimeSpan.FromSeconds(remainder);
+        }
+
+        public void SetAnimation(Animations a)
+        {
+            this.currentAnimation = a;
         }
     }
 }
