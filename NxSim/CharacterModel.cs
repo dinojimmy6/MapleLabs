@@ -50,64 +50,64 @@ namespace Game1
             mailArmSprite = MailArm.sprite;
 
 
-            hairBelowPos = new Vector2(100, 100) - (XmlLoader.StaticSprites["default.hairBelowBody"].origin + XmlLoader.StaticSprites["default.hairBelowBody"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
-            bodyPos = new Vector2(100, 100) - Body.origin;
-            armPos = new Vector2(100, 100) - (Arm.origin + Arm.navel - Body.navel);
+            hairBelowPos = new Vector2(0, 0) - (XmlLoader.StaticSprites["default.hairBelowBody"].origin + XmlLoader.StaticSprites["default.hairBelowBody"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
+            bodyPos = new Vector2(0, 0) - Body.origin;
+            armPos = new Vector2(0, 0) - (Arm.origin + Arm.navel - Body.navel);
             
-            headPos = new Vector2(100, 100) - (XmlLoader.StaticSprites["front.head"].origin + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
-            hairAbovePos = new Vector2(100, 100) - (XmlLoader.StaticSprites["default.hairOverHead"].origin + XmlLoader.StaticSprites["default.hairOverHead"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
-            facePos = new Vector2(100, 100) - (XmlLoader.StaticSprites["default.face"].origin + XmlLoader.StaticSprites["default.face"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
-            mailPos = new Vector2(100, 100) - (Mail.origin + Mail.navel - Body.navel);
-            mailArmPos = new Vector2(100, 100) - (MailArm.origin + MailArm.navel - Mail.navel + Mail.navel - Body.navel);
+            headPos = new Vector2(0, 0) - (XmlLoader.StaticSprites["front.head"].origin + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
+            hairAbovePos = new Vector2(0, 0) - (XmlLoader.StaticSprites["default.hairOverHead"].origin + XmlLoader.StaticSprites["default.hairOverHead"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
+            facePos = new Vector2(0, 0) - (XmlLoader.StaticSprites["default.face"].origin + XmlLoader.StaticSprites["default.face"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Body.neck);
+            mailPos = new Vector2(0, 0) - (Mail.origin + Mail.navel - Body.navel);
+            mailArmPos = new Vector2(0, 0) - (MailArm.origin + MailArm.navel - Mail.navel + Mail.navel - Body.navel);
 
             if(Skeleton.Sk["rHand"].ContainsKey(animation))
             {
                 var RHand = Skeleton.Sk["rHand"][animation] == null ? null : Skeleton.Sk["rHand"][animation][frame];
                 rHandSprite = RHand.sprite;
-                rHandPos = new Vector2(100, 100) - (RHand.origin + RHand.navel - Body.navel);
+                rHandPos = new Vector2(0, 0) - (RHand.origin + RHand.navel - Body.navel);
             }
             if (Skeleton.Sk["lHand"].ContainsKey(animation))
             {
                 var LHand = Skeleton.Sk["lHand"][animation] == null ? null : Skeleton.Sk["lHand"][animation][frame];
                 lHandSprite = LHand.sprite;
-                lHandPos = new Vector2(100, 100) - (LHand.origin); //+ LHand.handMove - Body.navel);
+                lHandPos = new Vector2(0, 0) - (LHand.origin); //+ LHand.handMove - Body.navel);
             }
             if (Skeleton.Sk["shoes"].ContainsKey(animation))
             {
                 var Shoes = Skeleton.Sk["shoes"][animation] == null ? null : Skeleton.Sk["shoes"][animation][frame];
                 shoesSprite = Shoes.sprite;
-                shoesPos = new Vector2(100, 100) - (Shoes.origin + Shoes.navel - Body.navel);
+                shoesPos = new Vector2(0, 0) - (Shoes.origin + Shoes.navel - Body.navel);
             }
 
         }
 
         public void Draw(SpriteBatch spriteBatch, bool facingRight)
         {
-            SpriteEffects flip = facingRight ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            DrawPart(spriteBatch, hairBelowSprite, hairBelowPos, flip);
-            DrawPart(spriteBatch, bodySprite, bodyPos, flip);
-            DrawPart(spriteBatch, mailSprite, mailPos, flip);
-            DrawPart(spriteBatch, headSprite, headPos, flip);
-            DrawPart(spriteBatch, armSprite, armPos, flip);
-            DrawPart(spriteBatch, hairAboveSprite, hairAbovePos, flip);
-            DrawPart(spriteBatch, mailArmSprite, mailArmPos, flip);
-            DrawPart(spriteBatch, faceSprite, facePos, flip);
+            DrawPart(spriteBatch, hairBelowSprite, hairBelowPos, facingRight);
+            DrawPart(spriteBatch, bodySprite, bodyPos, facingRight);
+            DrawPart(spriteBatch, mailSprite, mailPos, facingRight);
+            DrawPart(spriteBatch, headSprite, headPos, facingRight);
+            DrawPart(spriteBatch, armSprite, armPos, facingRight);
+            DrawPart(spriteBatch, hairAboveSprite, hairAbovePos, facingRight);
+            DrawPart(spriteBatch, mailArmSprite, mailArmPos, facingRight);
+            DrawPart(spriteBatch, faceSprite, facePos, facingRight);
             if (rHandSprite != null)
             {
-                DrawPart(spriteBatch, rHandSprite, rHandPos, flip);
+                DrawPart(spriteBatch, rHandSprite, rHandPos, facingRight);
             }
             if (lHandSprite != null)
             {
-                DrawPart(spriteBatch, lHandSprite, lHandPos, flip);
+                DrawPart(spriteBatch, lHandSprite, lHandPos, facingRight);
             }
             if (shoesSprite != null)
             {
-                DrawPart(spriteBatch, shoesSprite, shoesPos, flip);
+                DrawPart(spriteBatch, shoesSprite, shoesPos, facingRight);
             }
         }
 
-        public void DrawPart(SpriteBatch spriteBatch, Texture2D sprite, Vector2 pos, SpriteEffects flip)
+        public void DrawPart(SpriteBatch spriteBatch, Texture2D sprite, Vector2 pos, bool facingRight)
         {
+            SpriteEffects flip = facingRight ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             Rectangle destRect = new Rectangle((int) pos.X, (int) pos.Y, sprite.Width, sprite.Height);
             spriteBatch.Draw(sprite, destRect, null, Color.White, 0f, new Vector2(0, 0), flip, 0f);
         }

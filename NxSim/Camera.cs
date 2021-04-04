@@ -14,7 +14,7 @@ namespace Game1
         {
             Zoom = 3.0f;
             Rotation = 0.0f;
-            Position = new Vector2(100, 100);
+            Position = new Vector2(0, 0);
             UpdateTransform();
         }
 
