@@ -23,7 +23,7 @@ namespace Game1
             Transform = Matrix.CreateTranslation(new Vector3(-position.X, -position.Y, 0)) *//subtract camera coordinates to bring scene to origin [0, 0]
                  Matrix.CreateRotationZ(Rotation) *//rotate it
                  Matrix.CreateScale(new Vector3(Zoom, Zoom, 1)) *//zoom it
-                 Matrix.CreateTranslation(new Vector3(800 * 0.5f, 600 * 0.5f, 0));//shift entire scene to middle of screen 
+                 Matrix.CreateTranslation(new Vector3(1920 * 0.5f, 1080 * 0.5f, 0));//shift entire scene to middle of screen 
         }
 
         public void Move(int toMove)

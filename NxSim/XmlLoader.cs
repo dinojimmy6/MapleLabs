@@ -17,7 +17,9 @@ namespace Game1
         Walk,
         Walk2,
         Alert,
-        Swing
+        Swing,
+        Duck,
+        DuckStab
     }
 
     class Skeleton
@@ -200,6 +202,8 @@ namespace Game1
             AnimationStrings.Add("walk2", Animations.Walk2);
             AnimationStrings.Add("default", Animations.Default);
             AnimationStrings.Add("alert", Animations.Alert);
+            AnimationStrings.Add("proneStab", Animations.DuckStab);
+            AnimationStrings.Add("prone", Animations.Duck);
         }
 
         private static void LoadAnimation(XmlNode node, GraphicsDevice gfxd, EquipTypes et, string id)

@@ -18,8 +18,7 @@ namespace Game1
         public NxSim()
         {
             graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            
+            Window.AllowUserResizing = true;
         }
 
         /// <summary>
@@ -31,6 +30,9 @@ namespace Game1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            this.graphics.PreferredBackBufferHeight = 1080;
+            this.graphics.PreferredBackBufferWidth = 1920;
+            graphics.ApplyChanges();
             XmlLoader.MapStrings();
             XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Invalid, "00002013");
             XmlLoader.LoadXml(GraphicsDevice, EquipTypes.LongCoat, "01050045");
@@ -71,6 +73,7 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            this.IsMouseVisible = true;
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 

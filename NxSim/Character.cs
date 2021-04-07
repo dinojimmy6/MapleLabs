@@ -11,15 +11,15 @@ namespace Game1
 {
     class Character
     {
-        public ICharacterState characterState;
+        public ICharacterState currentState;
         public CharacterModel characterModel;
         public bool facingRight;
 
         public Character()
         {
             this.CharacterModel = new CharacterModel();
-            this.CharacterState = new IdleState();
-            this.CharacterState.Enter(this);
+            this.CurrentState = new IdleState();
+            this.CurrentState.Enter(this);
             facingRight = false;
         }
 
@@ -30,12 +30,8 @@ namespace Game1
 
         public void HandleInput(KeyboardState keyboardState)
         {
-            ICharacterState newState = this.CharacterState.HandleInput(keyboardState, this);
-            if (newState != null)
-            {
-                this.CharacterState = newState;
-                this.CharacterState.Enter(this);
-            }
+            this.CurrentState = this.CurrentState.HandleInput(keyboardState, this);
+            this.CurrentState.Enter(this);
         }
 
         public void SetAnimation(Animations a)
@@ -59,10 +55,10 @@ namespace Game1
             set { this.facingRight = value; }
         }
 
-        public ICharacterState CharacterState
+        public ICharacterState CurrentState
         {
-            get { return this.characterState; }
-            set { this.characterState = value; }
+            get { return this.currentState; }
+            set { this.currentState = value; }
         }
         public CharacterModel CharacterModel
         {

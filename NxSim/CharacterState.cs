@@ -29,9 +29,13 @@ namespace Game1
             {
                 return new WalkingState();
             }
+            else if (keyboardState.IsKeyDown(Keys.Down))
+            {
+                return new DuckState();
+            }
             else
             {
-                return null;
+                return chr.CurrentState;
             }
         }
 
@@ -57,12 +61,12 @@ namespace Game1
         {
             if (keyboardState.IsKeyDown(Keys.Right)) {
                 chr.FacingRight = true;
-                return null;
+                return chr.currentState;
             }
             else if (keyboardState.IsKeyDown(Keys.Left))
             {
                 chr.FacingRight = false;
-                return null;
+                return chr.currentState;
             }
             else
             {
@@ -78,6 +82,33 @@ namespace Game1
         public void Enter(Character chr)
         {
             chr.SetAnimation(Animations.Walk);
+        }
+    }
+
+    class DuckState : ICharacterState
+    {
+        public DuckState()
+        {
+
+        }
+
+        public ICharacterState HandleInput(KeyboardState keyboardState, Character chr)
+        {
+            if (keyboardState.IsKeyDown(Keys.Down))
+            {
+                return chr.CurrentState;
+            }
+            return new IdleState();
+        }
+
+        public void Update(KeyboardState KeyboardState, Character chr)
+        {
+
+        }
+
+        public void Enter(Character chr)
+        {
+            chr.SetAnimation(Animations.Duck);
         }
     }
 }
