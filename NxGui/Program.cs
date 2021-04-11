@@ -22,6 +22,7 @@ namespace WindowsFormsApp1
             XmlLoader.LoadStrings("wz\\capexmlstr.xml");
             XmlLoader.LoadStrings("wz\\glovexmlstr.xml");
             XmlLoader.LoadStrings("wz\\shoesxmlstr.xml");
+            XmlLoader.LoadStrings("wz\\weaponxmlstr.xml");
 
             SetupPipe();
             var processInfo = new ProcessStartInfo

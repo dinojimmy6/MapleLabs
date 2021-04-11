@@ -32,10 +32,12 @@
             this.SearchResult = new System.Windows.Forms.ListBox();
             this.EquipIcon = new System.Windows.Forms.PictureBox();
             this.Filters = new System.Windows.Forms.Panel();
+            this.FilterWeapon = new System.Windows.Forms.CheckBox();
             this.FilterCape = new System.Windows.Forms.CheckBox();
             this.FilterGloves = new System.Windows.Forms.CheckBox();
             this.FilterShoes = new System.Windows.Forms.CheckBox();
             this.FilterOverall = new System.Windows.Forms.CheckBox();
+            this.WeaponBasePicker = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.EquipIcon)).BeginInit();
             this.Filters.SuspendLayout();
             this.SuspendLayout();
@@ -68,6 +70,8 @@
             // 
             // Filters
             // 
+            this.Filters.Controls.Add(this.WeaponBasePicker);
+            this.Filters.Controls.Add(this.FilterWeapon);
             this.Filters.Controls.Add(this.FilterCape);
             this.Filters.Controls.Add(this.FilterGloves);
             this.Filters.Controls.Add(this.FilterShoes);
@@ -76,6 +80,17 @@
             this.Filters.Name = "Filters";
             this.Filters.Size = new System.Drawing.Size(361, 171);
             this.Filters.TabIndex = 5;
+            // 
+            // FilterWeapon
+            // 
+            this.FilterWeapon.AutoSize = true;
+            this.FilterWeapon.Location = new System.Drawing.Point(4, 99);
+            this.FilterWeapon.Name = "FilterWeapon";
+            this.FilterWeapon.Size = new System.Drawing.Size(72, 17);
+            this.FilterWeapon.TabIndex = 4;
+            this.FilterWeapon.Text = "Weapons";
+            this.FilterWeapon.UseVisualStyleBackColor = true;
+            this.FilterWeapon.CheckedChanged += new System.EventHandler(this.FilterWeapon_CheckedChanged);
             // 
             // FilterCape
             // 
@@ -121,6 +136,15 @@
             this.FilterOverall.UseVisualStyleBackColor = true;
             this.FilterOverall.CheckedChanged += new System.EventHandler(this.FilterOverall_CheckedChanged);
             // 
+            // WeaponBasePicker
+            // 
+            this.WeaponBasePicker.FormattingEnabled = true;
+            this.WeaponBasePicker.Location = new System.Drawing.Point(227, 4);
+            this.WeaponBasePicker.Name = "WeaponBasePicker";
+            this.WeaponBasePicker.Size = new System.Drawing.Size(121, 21);
+            this.WeaponBasePicker.TabIndex = 5;
+            this.WeaponBasePicker.SelectedIndexChanged += new System.EventHandler(this.WeaponBasePicker_SelectedIndexChanged);
+            // 
             // GuiForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -149,6 +173,8 @@
         private System.Windows.Forms.CheckBox FilterGloves;
         private System.Windows.Forms.CheckBox FilterShoes;
         private System.Windows.Forms.CheckBox FilterOverall;
+        private System.Windows.Forms.CheckBox FilterWeapon;
+        private System.Windows.Forms.ComboBox WeaponBasePicker;
     }
 }
 

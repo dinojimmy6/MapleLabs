@@ -15,11 +15,11 @@ namespace WindowsFormsApp1
     public partial class GuiForm : Form
     {
         private HashSet<EquipTypes> Filter = new HashSet<EquipTypes>();
-
+        private string lastSelectedEquip = "1702920";
         public GuiForm()
         {
             InitializeComponent();
-            var t = new Trie<String>();
+            WeaponBasePicker.DataSource = Enum.GetValues(typeof(WeaponTypes));
         }
 
         private void SearchBox_TextChanged(object sender, EventArgs e)
@@ -31,7 +31,8 @@ namespace WindowsFormsApp1
         {
             if(SearchResult.SelectedItem != null)
             {
-                Program.sw.WriteLine("0" + ((Tuple<string, string, EquipTypes>) SearchResult.SelectedItem).Item2);
+                lastSelectedEquip = ((Tuple<string, string, EquipTypes>)SearchResult.SelectedItem).Item2;
+                Program.sw.WriteLine("0" + lastSelectedEquip + "-" + (int)WeaponBasePicker.SelectedItem);
                 Program.ev.Set();
             }
         }
@@ -67,6 +68,11 @@ namespace WindowsFormsApp1
             HandleFilterEvent(EquipTypes.Cape, FilterCape.Checked);
         }
 
+        private void FilterWeapon_CheckedChanged(object sender, EventArgs e)
+        {
+            HandleFilterEvent(EquipTypes.Weapon, FilterWeapon.Checked);
+        }
+
         private void HandleFilterEvent(EquipTypes et, bool isChecked)
         {
             if(isChecked)
@@ -86,13 +92,40 @@ namespace WindowsFormsApp1
             SearchResult.Items.Clear();
             foreach (EquipEntry item in XmlLoader.Trie.Retrieve(SearchBox.Text))
             {
-                if(Filter.Contains(item.Item3))
+                if(Filter.Contains(item.Item3) && !ExcludedPrefix(item.Item2))
                 {
                     SearchResult.Items.Add(item);
                 }
                 
             }
             SearchResult.EndUpdate();
+        }
+
+        private bool ExcludedPrefix(string id)
+        {
+            HashSet<int> exclude = new HashSet<int> { 135, 139, 150, 151, 160, 169 };
+            int prefix = Int32.Parse(id) / 10000;
+            if (exclude.Contains(prefix))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private void WeaponBasePicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //rogram.sw.WriteLine("0" + lastSelectedEquip + "-" + (int) WeaponBasePicker.SelectedItem);
+            //Program.ev.Set();
+        }
+
+        private int GetSelectedWeaponBase()
+        {
+            WeaponTypes ret;
+            if (Enum.TryParse((string) WeaponBasePicker.SelectedItem, out ret))
+            {
+                return (int) ret;
+            }
+            return 0;
         }
     }
 }

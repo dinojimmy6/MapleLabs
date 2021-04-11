@@ -29,11 +29,19 @@ namespace Game1
             while(true)
             {
                 ev.WaitOne();
-                string id = sr.ReadLine();
+                string line = sr.ReadLine();
+                string id = line.Split('-')[0];
+                string weaponBase = line.Split('-')[1];
                 EquipTypes et = EquipTypesExtension.GetEquipTypeFromId(id);
                 id = FormatId(id);
-                
-                XmlLoader.LoadXml(game.GraphicsDevice, et, id);
+                if(Int32.Parse(id) / 10000 <= 120)
+                {
+                    XmlLoader.LoadXml(game.GraphicsDevice, et, id);
+                }
+                else
+                {
+                    XmlLoader.LoadWeaponXml(game.GraphicsDevice, et, id, weaponBase);
+                }
                 game.UpdateCharacter();
             }
         }

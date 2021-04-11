@@ -40,6 +40,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\EquipTypes.cs">

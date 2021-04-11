@@ -13,6 +13,7 @@ namespace Game1
 
         public CharacterFrame(Animations animation, int frame)
         {
+            LoadFrameData("effect", animation, frame);
             LoadFrameData("arm", animation, frame);
             LoadFrameData("body", animation, frame);
             LoadFrameData("mail", animation, frame);
@@ -22,63 +23,72 @@ namespace Game1
             LoadFrameData("shoes", animation, frame);
             LoadFrameData("rGlove", animation, frame);
             LoadFrameData("lGlove", animation, frame);
+            LoadFrameData("weapon", animation, frame);
 
             Frames.Add("head", XmlLoader.StaticSprites["front.head"]);
             Frames.Add("hairBelow", XmlLoader.StaticSprites["default.hairBelowBody"]);
             Frames.Add("hairAbove", XmlLoader.StaticSprites["default.hairOverHead"]);
             Frames.Add("face", XmlLoader.StaticSprites["default.face"]);
-         
-            if(Frames.ContainsKey("hairBelow"))
+
+            if (Frames.ContainsKey("effect"))
             {
-                Pos.Add("hairBelow", new Vector2(100, 100) - (XmlLoader.StaticSprites["default.hairBelowBody"].origin + XmlLoader.StaticSprites["default.hairBelowBody"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
+                Pos.Add("effect", new Vector2(300, 300) - (Frames["effect"].origin + Frames["effect"].navel - Frames["body"].navel));
+            }
+            if (Frames.ContainsKey("hairBelow"))
+            {
+                Pos.Add("hairBelow", new Vector2(300, 300) - (XmlLoader.StaticSprites["default.hairBelowBody"].origin + XmlLoader.StaticSprites["default.hairBelowBody"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
             }
             if (Frames.ContainsKey("body"))
             {
-                Pos.Add("body", new Vector2(100, 100) - Frames["body"].origin);
+                Pos.Add("body", new Vector2(300, 300) - Frames["body"].origin);
             }
             if (Frames.ContainsKey("rGlove"))
             {
-                Pos.Add("rGlove", new Vector2(100, 100) - (Frames["rGlove"].origin + Frames["rGlove"].navel - Frames["body"].navel));
+                Pos.Add("rGlove", new Vector2(300, 300) - (Frames["rGlove"].origin + Frames["rGlove"].navel - Frames["body"].navel));
             }
             if (Frames.ContainsKey("lGlove"))
             {
-                Pos.Add("lGlove", new Vector2(100, 100) - (Frames["lGlove"].origin + Frames["lGlove"].navel - Frames["body"].navel));
+                Pos.Add("lGlove", new Vector2(300, 300) - (Frames["lGlove"].origin + Frames["lGlove"].navel - Frames["body"].navel));
             }
             if (Frames.ContainsKey("arm"))
             {
-                Pos.Add("arm", new Vector2(100, 100) - (Frames["arm"].origin + Frames["arm"].navel - Frames["body"].navel));
+                Pos.Add("arm", new Vector2(300, 300) - (Frames["arm"].origin + Frames["arm"].navel - Frames["body"].navel));
             }
             if (Frames.ContainsKey("head"))
             {
-                Pos.Add("head", new Vector2(100, 100) - (XmlLoader.StaticSprites["front.head"].origin + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
+                Pos.Add("head", new Vector2(300, 300) - (XmlLoader.StaticSprites["front.head"].origin + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
             }
             if (Frames.ContainsKey("hairAbove"))
             {
-                Pos.Add("hairAbove", new Vector2(100, 100) - (XmlLoader.StaticSprites["default.hairOverHead"].origin + XmlLoader.StaticSprites["default.hairOverHead"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
+                Pos.Add("hairAbove", new Vector2(300, 300) - (XmlLoader.StaticSprites["default.hairOverHead"].origin + XmlLoader.StaticSprites["default.hairOverHead"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
             }
             if (Frames.ContainsKey("face"))
             {
-                Pos.Add("face", new Vector2(100, 100) - (XmlLoader.StaticSprites["default.face"].origin + XmlLoader.StaticSprites["default.face"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
+                Pos.Add("face", new Vector2(300, 300) - (XmlLoader.StaticSprites["default.face"].origin + XmlLoader.StaticSprites["default.face"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
             }
             if (Frames.ContainsKey("mail"))
             {
-                Pos.Add("mail", new Vector2(100, 100) - (Frames["mail"].origin + Frames["mail"].navel - Frames["body"].navel));
+                Pos.Add("mail", new Vector2(300, 300) - (Frames["mail"].origin + Frames["mail"].navel - Frames["body"].navel));
             }
             if (Frames.ContainsKey("mailArm"))
             {
-                Pos.Add("mailArm", new Vector2(100, 100) - (Frames["mailArm"].origin + Frames["mailArm"].navel - Frames["mail"].navel + Frames["mail"].navel - Frames["body"].navel));
+                Pos.Add("mailArm", new Vector2(300, 300) - (Frames["mailArm"].origin + Frames["mailArm"].navel - Frames["mail"].navel + Frames["mail"].navel - Frames["body"].navel));
             }
             if (Frames.ContainsKey("rHand"))
             {
-                Pos.Add("rHand", new Vector2(100, 100) - (Frames["rHand"].origin + Frames["rHand"].navel - Frames["body"].navel));
+                Pos.Add("rHand", new Vector2(300, 300) - (Frames["rHand"].origin + Frames["rHand"].navel - Frames["body"].navel));
             }
             if (Frames.ContainsKey("lHand"))
             {
-                Pos.Add("lHand", new Vector2(100, 100) - (Frames["lHand"].origin)); //+ LHand.handMove - Body.navel);
+                Pos.Add("lHand", new Vector2(300, 300) - (Frames["lHand"].origin)); //+ LHand.handMove - Body.navel);
             }
             if (Frames.ContainsKey("shoes"))
             {
-                Pos.Add("shoes", new Vector2(100, 100) - (Frames["shoes"].origin + Frames["shoes"].navel - Frames["body"].navel));
+                Pos.Add("shoes", new Vector2(300, 300) - (Frames["shoes"].origin + Frames["shoes"].navel - Frames["body"].navel));
+            }
+            if (Frames.ContainsKey("weapon"))
+            {
+                Pos.Add("weapon", new Vector2(300, 300) - (Frames["weapon"].origin + Frames["weapon"].navel - Frames["body"].navel));
             }
         }
 
@@ -95,25 +105,19 @@ namespace Game1
                 return;
             }
             var animationSet = component[animation];
-            var componentFrame = animationSet[frame];
-            Frames.Add(componentName, componentFrame);
+            if (animationSet.ContainsKey(frame))
+            {
+                var componentFrame = animationSet[frame];
+                Frames.Add(componentName, componentFrame);
+            }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, Animations animation)
         {
-            Draw(spriteBatch, "hairBelow");
-            Draw(spriteBatch, "body");
-            Draw(spriteBatch, "lGlove");
-            Draw(spriteBatch, "mail");
-            Draw(spriteBatch, "head");
-            Draw(spriteBatch, "arm");
-            Draw(spriteBatch, "rGlove");
-            Draw(spriteBatch, "hairAbove");
-            Draw(spriteBatch, "mailArm");
-            Draw(spriteBatch, "face");
-            Draw(spriteBatch, "rHand");
-            Draw(spriteBatch, "lHand");
-            Draw(spriteBatch, "shoes");
+            foreach(string layer in animation.Layer())
+            {
+                Draw(spriteBatch, layer);
+            }
         }
 
         private string getFrameString(int frame, string pre, string post)
@@ -183,6 +187,7 @@ namespace Game1
             LoadAnimation(Animations.Walk);
             LoadAnimation(Animations.Walk2);
             LoadAnimation(Animations.Alert);
+            LoadAnimation(Animations.SwingO1);
         }
 
         public void LoadAnimation(Animations a)

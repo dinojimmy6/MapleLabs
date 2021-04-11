@@ -35,6 +35,7 @@ namespace Game1
             XmlLoader.LoadXml(GraphicsDevice, EquipTypes.LongCoat, "01050045");
             XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Shoes, "01073382");
             XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Glove, "01082223");
+            XmlLoader.LoadWeaponXml(GraphicsDevice, EquipTypes.Weapon, "01702920", "30");
             XmlLoader.LoadHeadXml(GraphicsDevice);
             XmlLoader.LoadHairXml(GraphicsDevice);
             XmlLoader.LoadFaceXml(GraphicsDevice);
@@ -87,8 +88,8 @@ namespace Game1
             GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
-            chr.CurrentFrame.Draw(spriteBatch);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
+            chr.CurrentFrame.Draw(spriteBatch, chr.currentAnimation);
             spriteBatch.End();
             base.Draw(gameTime);
         }
