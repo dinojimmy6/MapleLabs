@@ -27,9 +27,9 @@ namespace WindowsFormsApp1
             SetupPipe();
             var processInfo = new ProcessStartInfo
             {
-                FileName = "..\\Engine\\Game1.exe",
+                FileName = "..\\Engine\\NxSim.exe",
                 Arguments = pipeServer.GetClientHandleAsString(),
-                WorkingDirectory = System.IO.Path.GetDirectoryName("..\\Engine\\Game1.exe"),
+                WorkingDirectory = System.IO.Path.GetDirectoryName("..\\Engine\\NxSim.exe"),
                 UseShellExecute = false
             };
 

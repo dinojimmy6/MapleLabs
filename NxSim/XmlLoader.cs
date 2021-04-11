@@ -18,7 +18,9 @@ namespace Game1
         Walk,
         Walk2,
         Alert,
-        SwingO1
+        SwingO1,
+        Duck,
+        DuckStab
     }
 
     static class AnimationsExtensions
@@ -258,6 +260,8 @@ namespace Game1
             AnimationStrings.Add("default", Animations.Default);
             AnimationStrings.Add("alert", Animations.Alert);
             AnimationStrings.Add("swingO1", Animations.SwingO1);
+            AnimationStrings.Add("proneStab", Animations.DuckStab);
+            AnimationStrings.Add("prone", Animations.Duck);
         }
 
         private static void LoadAnimation(XmlNode node, GraphicsDevice gfxd, EquipTypes et, string id, string imgNameIn)
