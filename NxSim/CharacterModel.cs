@@ -34,7 +34,7 @@ namespace Game1
             if (Frames.ContainsKey("effect"))
             {
                 Pos.Add("effect", new Vector2(0, 0) - (Frames["effect"].origin + Frames["effect"].navel - Frames["body"].navel));
-                Pos.Add("effectF", new Vector2(0, 0) - (FlipX(Frames["effect"].origin) + new Vector2(Frames["effect"].sprite.Width, 0) + FlipX(Frames["effect"].navel) - FlipX(Frames["body"].navel)));
+                Pos.Add("effectF", new Vector2(0, 0) - (FlipX(Frames["effect"].origin) + new Vector2(Frames["effect"].spriteLoc.Width, 0) + FlipX(Frames["effect"].navel) - FlipX(Frames["body"].navel)));
             }
             if (Frames.ContainsKey("hairBelow"))
             {
@@ -44,22 +44,22 @@ namespace Game1
             if (Frames.ContainsKey("body"))
             {
                 Pos.Add("body", new Vector2(0, 0) - Frames["body"].origin);
-                Pos.Add("bodyF", new Vector2(0, 0) - (FlipX(Frames["body"].origin) + new Vector2(Frames["body"].sprite.Width, 0))); // width - origin
+                Pos.Add("bodyF", new Vector2(0, 0) - (FlipX(Frames["body"].origin) + new Vector2(Frames["body"].spriteLoc.Width, 0))); // width - origin
             }
             if (Frames.ContainsKey("rGlove"))
             {
                 Pos.Add("rGlove", new Vector2(0, 0) - (Frames["rGlove"].origin + Frames["rGlove"].navel - Frames["body"].navel));
-                Pos.Add("rGloveF", new Vector2(0, 0) - (FlipX(Frames["rGlove"].origin) + new Vector2(Frames["rGlove"].sprite.Width, 0) + FlipX(Frames["rGlove"].navel) - FlipX(Frames["body"].navel)));
+                Pos.Add("rGloveF", new Vector2(0, 0) - (FlipX(Frames["rGlove"].origin) + new Vector2(Frames["rGlove"].spriteLoc.Width, 0) + FlipX(Frames["rGlove"].navel) - FlipX(Frames["body"].navel)));
             }
             if (Frames.ContainsKey("lGlove"))
             {
                 Pos.Add("lGlove", new Vector2(0, 0) - (Frames["lGlove"].origin + Frames["lGlove"].navel - Frames["body"].navel));
-                Pos.Add("lGloveF", new Vector2(0, 0) - (FlipX(Frames["lGlove"].origin) + new Vector2(Frames["lGlove"].sprite.Width, 0) + FlipX(Frames["lGlove"].navel) - FlipX(Frames["body"].navel)));
+                Pos.Add("lGloveF", new Vector2(0, 0) - (FlipX(Frames["lGlove"].origin) + new Vector2(Frames["lGlove"].spriteLoc.Width, 0) + FlipX(Frames["lGlove"].navel) - FlipX(Frames["body"].navel)));
             }
             if (Frames.ContainsKey("arm"))
             {
                 Pos.Add("arm", new Vector2(0, 0) - (Frames["arm"].origin + Frames["arm"].navel - Frames["body"].navel));
-                Pos.Add("armF", new Vector2(0, 0) - (FlipX(Frames["arm"].origin) + new Vector2(Frames["arm"].sprite.Width, 0) + FlipX(Frames["arm"].navel) - FlipX(Frames["body"].navel)));
+                Pos.Add("armF", new Vector2(0, 0) - (FlipX(Frames["arm"].origin) + new Vector2(Frames["arm"].spriteLoc.Width, 0) + FlipX(Frames["arm"].navel) - FlipX(Frames["body"].navel)));
             }
             if (Frames.ContainsKey("head"))
             {
@@ -79,33 +79,33 @@ namespace Game1
             if (Frames.ContainsKey("mail"))
             {
                 Pos.Add("mail", new Vector2(0, 0) - (Frames["mail"].origin + Frames["mail"].navel - Frames["body"].navel));
-                Pos.Add("mailF", new Vector2(0, 0) - (FlipX(Frames["mail"].origin) + new Vector2(Frames["mail"].sprite.Width, 0) + FlipX(Frames["mail"].navel) - FlipX(Frames["body"].navel)));
+                Pos.Add("mailF", new Vector2(0, 0) - (FlipX(Frames["mail"].origin) + new Vector2(Frames["mail"].spriteLoc.Width, 0) + FlipX(Frames["mail"].navel) - FlipX(Frames["body"].navel)));
             }
             if (Frames.ContainsKey("mailArm"))
             {
                 Pos.Add("mailArm", new Vector2(0, 0) - (Frames["mailArm"].origin + Frames["mailArm"].navel - Frames["mail"].navel + Frames["mail"].navel - Frames["body"].navel));
-                Pos.Add("mailArmF", new Vector2(0, 0) - (FlipX(Frames["mailArm"].origin) + new Vector2(Frames["mailArm"].sprite.Width, 0) + FlipX(Frames["mailArm"].navel) - FlipX(Frames["mail"].navel) + FlipX(Frames["mail"].navel) - FlipX(Frames["body"].navel)));
+                Pos.Add("mailArmF", new Vector2(0, 0) - (FlipX(Frames["mailArm"].origin) + new Vector2(Frames["mailArm"].spriteLoc.Width, 0) + FlipX(Frames["mailArm"].navel) - FlipX(Frames["mail"].navel) + FlipX(Frames["mail"].navel) - FlipX(Frames["body"].navel)));
 
             }
             if (Frames.ContainsKey("rHand"))
             {
                 Pos.Add("rHand", new Vector2(0, 0) - (Frames["rHand"].origin + Frames["rHand"].navel - Frames["body"].navel));
-                Pos.Add("rHandF", new Vector2(0, 0) - (FlipX(Frames["rHand"].origin) + new Vector2(Frames["rHand"].sprite.Width, 0) + FlipX(Frames["rHand"].navel) - FlipX(Frames["body"].navel)));
+                Pos.Add("rHandF", new Vector2(0, 0) - (FlipX(Frames["rHand"].origin) + new Vector2(Frames["rHand"].spriteLoc.Width, 0) + FlipX(Frames["rHand"].navel) - FlipX(Frames["body"].navel)));
             }
             if (Frames.ContainsKey("lHand"))
             {
                 Pos.Add("lHand", new Vector2(0, 0) - Frames["lHand"].origin); //+ LHand.handMove - Body.navel);
-                Pos.Add("lHandF", new Vector2(0, 0) - (FlipX(Frames["lHand"].origin) + new Vector2(Frames["lHand"].sprite.Width, 0)));
+                Pos.Add("lHandF", new Vector2(0, 0) - (FlipX(Frames["lHand"].origin) + new Vector2(Frames["lHand"].spriteLoc.Width, 0)));
             }
             if (Frames.ContainsKey("shoes"))
             {
                 Pos.Add("shoes", new Vector2(0, 0) - (Frames["shoes"].origin + Frames["shoes"].navel - Frames["body"].navel));
-                Pos.Add("shoesF", new Vector2(0, 0) - (FlipX(Frames["shoes"].origin) + new Vector2(Frames["shoes"].sprite.Width, 0) + FlipX(Frames["shoes"].navel) - FlipX(Frames["body"].navel)));
+                Pos.Add("shoesF", new Vector2(0, 0) - (FlipX(Frames["shoes"].origin) + new Vector2(Frames["shoes"].spriteLoc.Width, 0) + FlipX(Frames["shoes"].navel) - FlipX(Frames["body"].navel)));
             }
             if (Frames.ContainsKey("weapon"))
             {
                 Pos.Add("weapon", new Vector2(0, 0) - (Frames["weapon"].origin + Frames["weapon"].navel - Frames["body"].navel));
-                Pos.Add("weaponF", new Vector2(0, 0) - (FlipX(Frames["weapon"].origin) + new Vector2(Frames["weapon"].sprite.Width, 0) + FlipX(Frames["weapon"].navel) - FlipX(Frames["body"].navel)));
+                Pos.Add("weaponF", new Vector2(0, 0) - (FlipX(Frames["weapon"].origin) + new Vector2(Frames["weapon"].spriteLoc.Width, 0) + FlipX(Frames["weapon"].navel) - FlipX(Frames["body"].navel)));
             }
         }
 
@@ -159,8 +159,9 @@ namespace Game1
             if(Frames.ContainsKey(componentName) && Pos.ContainsKey(componentName))
             {
                 SpriteEffects flip = facingRight ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                Rectangle destRect = new Rectangle(Convert.ToInt32(Pos[facingRight ? componentName + "F" : componentName].X), Convert.ToInt32(Pos[facingRight ? componentName + "F" : componentName].Y), Frames[componentName].sprite.Width, Frames[componentName].sprite.Height);
-                spriteBatch.Draw(Frames[componentName].sprite, destRect, null, Color.White, 0f, new Vector2(0, 0), flip, 0f);
+                Rectangle destRect = new Rectangle(Convert.ToInt32(Pos[facingRight ? componentName + "F" : componentName].X), Convert.ToInt32(Pos[facingRight ? componentName + "F" : componentName].Y), (int) Frames[componentName].spriteLoc.Width, (int) Frames[componentName].spriteLoc.Height);
+                Rectangle srcRect = new Rectangle((int)Frames[componentName].spriteLoc.X, (int)Frames[componentName].spriteLoc.Y, (int)Frames[componentName].spriteLoc.Width, (int)Frames[componentName].spriteLoc.Height);
+                spriteBatch.Draw(Frames[componentName].Sprite, destRect, srcRect, Color.White, 0f, new Vector2(0, 0), flip, 0f);
             }
         }
     }

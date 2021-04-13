@@ -2,7 +2,8 @@
 
 public enum EquipTypes
 {
-    Invalid = 0,
+    Misc = 0,
+    Face = 1,
     Shoes = 107,
     Cape = 110,
     LongCoat = 105,
@@ -62,6 +63,6 @@ public static class EquipTypesExtension
                 return et;
             }
         }
-        return EquipTypes.Invalid;
+        return EquipTypes.Misc;
     }
 }

@@ -90,20 +90,11 @@ namespace Game1
 
         public static void LoadXml(GraphicsDevice gfxd, EquipTypes et, string id)
         {
-            string xmlPath;
-            if (et == EquipTypes.Invalid)
-            {
-                xmlPath = "wz\\" + id + ".img.xml";
-            }
-            else
-            {
-                xmlPath = "wz\\" + et + "\\" + id + ".img.xml";
-            }
+            string xmlPath = "wz\\" + et + "\\" + id + ".img.xml";
             XmlDocument doc = new XmlDocument();
             doc.Load(xmlPath);
             foreach (XmlNode node in doc["imgdir"].ChildNodes)
             {
-
                 if (AnimationStrings.ContainsKey(node.Attributes["name"].Value))
                 {
                     LoadAnimation(node, gfxd, et, id, null);
@@ -145,14 +136,12 @@ namespace Game1
         public static void LoadHeadXml(GraphicsDevice gfxd)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load("wz\\12013xml\\12013xml.xml");
+            doc.Load("wz\\Misc\\head.img.xml");
             XmlNode front = doc["xmldump"]["wzimg"].SelectNodes("imgdir[@name='front']")[0]["canvas"];
             string imgName = "front.head";
             short x = short.Parse(front["vector"].Attributes["x"].Value);
             short y = short.Parse(front["vector"].Attributes["y"].Value);
-            FileStream fileStream = new FileStream("wz\\00012013.img\\" + imgName + ".png", FileMode.Open);
-            ComponentFrame cf = new ComponentFrame(Texture2D.FromStream(gfxd, fileStream), new Vector2(x, y));
-            fileStream.Dispose();
+            ComponentFrame cf = new ComponentFrame(gfxd, "wz\\Misc\\head.atlas.png", new Vector2(x, y), EquipTypes.Misc, "head", imgName);
             XmlNodeList mapNodes = front.SelectNodes("imgdir[@name='map']");
             if (mapNodes.Count == 1)
             {
@@ -173,7 +162,7 @@ namespace Game1
         public static void LoadHairXml(GraphicsDevice gfxd)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load("wz\\00041656xml\\00041656xml.xml");
+            doc.Load("wz\\Misc\\00041656.img.xml");
             XmlNode default_ = doc["xmldump"]["wzimg"].SelectNodes("imgdir[@name='default']")[0];
             foreach (XmlNode component in default_.SelectNodes("canvas"))
             {
@@ -181,9 +170,7 @@ namespace Game1
                 string imgName = "default" + "." + componentName;
                 short x = short.Parse(component["vector"].Attributes["x"].Value);
                 short y = short.Parse(component["vector"].Attributes["y"].Value);
-                FileStream fileStream = new FileStream("wz\\00041656.img\\" + imgName + ".png", FileMode.Open);
-                ComponentFrame cf = new ComponentFrame(Texture2D.FromStream(gfxd, fileStream), new Vector2(x, y));
-                fileStream.Dispose();
+                ComponentFrame cf = new ComponentFrame(gfxd, "wz\\Misc\\00041656.atlas.png", new Vector2(x, y), EquipTypes.Misc, "00041656", imgName);
                 XmlNodeList mapNodes = component.SelectNodes("imgdir[@name='map']");
                 if (mapNodes.Count == 1)
                 {
@@ -209,9 +196,7 @@ namespace Game1
                 string imgName = "default" + "." + componentName;
                 short x = short.Parse(component["vector"].Attributes["x"].Value);
                 short y = short.Parse(component["vector"].Attributes["y"].Value);
-                FileStream fileStream = new FileStream("wz\\Face\\00020644.img\\00020644.img\\" + imgName + ".png", FileMode.Open);
-                ComponentFrame cf = new ComponentFrame(Texture2D.FromStream(gfxd, fileStream), new Vector2(x, y));
-                fileStream.Dispose();
+                ComponentFrame cf = new ComponentFrame(gfxd, "wz\\Face\\00020644.atlas.png", new Vector2(x, y), EquipTypes.Face, "00020644", imgName);
                 XmlNodeList mapNodes = component.SelectNodes("imgdir[@name='map']");
                 if (mapNodes.Count == 1)
                 {
@@ -231,13 +216,20 @@ namespace Game1
                 {
                     string componentName = component.Attributes["name"].Value;
                     string imgName = ResolveInLink(component);
+                    string outLink = ResolveOutLink(component);
+                    string imgPath = "wz\\Face\\00020644.atlas.png";
+                    string id = "00020644";
+                    if (outLink != null)
+                    {
+                        imgPath = "wz\\Face\\" + outLink.Split('\\')[0].Split(".img")[0] + ".atlas.png";
+                        imgName = outLink.Split('\\').Last();
+                        id = outLink.Split('\\').First();
+                    }
                     string keyName = blink.Attributes["name"].Value + "." + frameNum + "." + componentName;
                     imgName = imgName == null ? keyName : imgName;
                     short x = short.Parse(component["vector"].Attributes["x"].Value);
                     short y = short.Parse(component["vector"].Attributes["y"].Value);
-                    FileStream fileStream = new FileStream("wz\\Face\\00020644.img\\00020644.img\\" + imgName + ".png", FileMode.Open);
-                    ComponentFrame cf = new ComponentFrame(Texture2D.FromStream(gfxd, fileStream), new Vector2(x, y));
-                    fileStream.Dispose();
+                    ComponentFrame cf = new ComponentFrame(gfxd, imgPath, new Vector2(x, y), EquipTypes.Face, id, imgName);
                     XmlNodeList mapNodes = component.SelectNodes("imgdir[@name='map']");
                     if (mapNodes.Count == 1)
                     {
@@ -267,14 +259,7 @@ namespace Game1
         private static void LoadAnimation(XmlNode node, GraphicsDevice gfxd, EquipTypes et, string id, string imgNameIn)
         {
             string imgPath;
-            if (et == EquipTypes.Invalid)
-            {
-                imgPath = "wz\\" + id + ".img\\";
-            }
-            else
-            {
-                imgPath = "wz\\" + et + "\\" + id + ".img\\" + id + ".img\\";
-            }
+            imgPath = "wz\\" + et + "\\" + id + ".atlas.png";
             Dictionary<string, Dictionary<int, ComponentFrame>> Books = new Dictionary<string, Dictionary<int, ComponentFrame>>();
             Animations animation = AnimationStrings[node.Attributes["name"].Value];
             List<int> delays = new List<int>();
@@ -306,15 +291,14 @@ namespace Game1
 
                     if (outLink != null)
                     {
-                        imgPath = "wz\\" + et + "\\" + outLink.Split('\\')[0] + "\\";
-                        imgName = outLink;
+                        imgPath = "wz\\" + et + "\\" + outLink.Split('\\')[0].Split(".img")[0] + ".atlas.png";
+                        imgName = outLink.Split('\\').Last();
+                        id = outLink.Split('\\').First();
                     }
                     imgName = imgName == null ? imgNameIn + node.Attributes["name"].Value + "." + frameNum + "." + componentName : imgName;
                     short x = short.Parse(component["vector"].Attributes["x"].Value);
                     short y = short.Parse(component["vector"].Attributes["y"].Value);
-                    FileStream fileStream = new FileStream(imgPath + imgName + ".png", FileMode.Open);
-                    ComponentFrame cf = new ComponentFrame(Texture2D.FromStream(gfxd, fileStream), new Vector2(x, y));
-                    fileStream.Dispose();
+                    ComponentFrame cf = new ComponentFrame(gfxd, imgPath, new Vector2(x, y), et, id, imgName);
                     imgPath = origImgPath;
                     XmlNodeList mapNodes = component.SelectNodes("imgdir[@name='map']");
                     if (mapNodes.Count == 1)
@@ -373,7 +357,7 @@ namespace Game1
             if (inLink.Count > 0)
             {
                 string[] sp = inLink[0].Attributes["value"].Value.Split('/');
-                return sp[2] + "\\" + sp[3] + "." + sp[4] + "." + sp[5];
+                return sp[2].Split(".img").First() + "\\" + sp[3] + "." + sp[4] + "." + sp[5];
             }
             return null;
         }
@@ -428,18 +412,42 @@ namespace Game1
 
     class ComponentFrame
     {
-        public Texture2D sprite;
+        private static Dictionary<string, Texture2D> sheets = new Dictionary<string, Texture2D>();
+        private string sheetKey;
+
         public Vector2 origin;
         public Vector2 neck;
         public Vector2 navel;
         public Vector2 hand;
         public Vector2 handMove;
         public Vector2 brow;
+        public Rectangle spriteLoc;
 
-        public ComponentFrame(Texture2D _sprite, Vector2 origin)
+        public ComponentFrame(GraphicsDevice gfxd, string imgPath, Vector2 origin, EquipTypes et, string id, string imgName)
         {
-            sprite = _sprite;
+            sheetKey = imgPath.Split('\\').Last();
+            if (!sheets.ContainsKey(sheetKey))
+            {
+                FileStream fileStream = new FileStream(imgPath, FileMode.Open);
+                sheets.Add(sheetKey, Texture2D.FromStream(gfxd, fileStream));
+                fileStream.Dispose();
+            }
+            XmlDocument doc = new XmlDocument();
+            doc.Load("wz\\" + et + "\\" + id + ".atlas.xml");
+
+            XmlNode node = doc["TextureAtlas"].SelectNodes("sprite[@n='" + imgName + ".png" + "']")[0];
+            spriteLoc = new Rectangle(short.Parse(node.Attributes["x"].Value), short.Parse(node.Attributes["y"].Value),
+                                      short.Parse(node.Attributes["w"].Value), short.Parse(node.Attributes["h"].Value));
             this.origin = origin;
         }
+
+        public Texture2D Sprite
+        {
+            get
+            {
+                return sheets[sheetKey];
+            }
+        }
+
     }
 }

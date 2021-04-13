@@ -44,7 +44,8 @@ namespace WindowsFormsApp1
                 var item = (Tuple<string, string, EquipTypes>) SearchResult.SelectedItem;
                 string dir = "0" + item.Item2 + ".img\\";
                 EquipTypes et = item.Item3;
-                EquipIcon.Load("..\\Engine\\wz\\" + et + "\\" +  dir + dir + "info.icon.png");
+                //EquipIcon.Load("..\\Engine\\wz\\" + et + "\\" +  dir + dir + "info.icon.png");
+                //TODO: Reimplement icon loading
             }
         }
 
