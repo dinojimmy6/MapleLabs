@@ -39,7 +39,7 @@ namespace Game1
             if (Frames.ContainsKey("hairBelow"))
             {
                 Pos.Add("hairBelow", new Vector2(0, 0) - (XmlLoader.StaticSprites["default.hairBelowBody"].origin + XmlLoader.StaticSprites["default.hairBelowBody"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
-                Pos.Add("hairBelowF", new Vector2(0, 0) - (XmlLoader.StaticSprites["default.hairBelowBody"].origin + XmlLoader.StaticSprites["default.hairBelowBody"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
+                Pos.Add("hairBelowF", new Vector2(0, 0) - (FlipX(XmlLoader.StaticSprites["default.hairBelowBody"].origin) + new Vector2(XmlLoader.StaticSprites["default.hairBelowBody"].spriteLoc.Width, 0) + FlipX(XmlLoader.StaticSprites["default.hairBelowBody"].brow) - FlipX(XmlLoader.StaticSprites["front.head"].brow) + FlipX(XmlLoader.StaticSprites["front.head"].neck) - FlipX(Frames["body"].neck)));
             }
             if (Frames.ContainsKey("body"))
             {
@@ -64,17 +64,17 @@ namespace Game1
             if (Frames.ContainsKey("head"))
             {
                 Pos.Add("head", new Vector2(0, 0) - (XmlLoader.StaticSprites["front.head"].origin + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
-                Pos.Add("headF", new Vector2(0, 0) - (XmlLoader.StaticSprites["front.head"].origin + FlipX(XmlLoader.StaticSprites["front.head"].neck) - FlipX(Frames["body"].neck)));
+                Pos.Add("headF", new Vector2(0, 0) - (FlipX(XmlLoader.StaticSprites["front.head"].origin) + new Vector2(XmlLoader.StaticSprites["front.head"].spriteLoc.Width, 0) + FlipX(XmlLoader.StaticSprites["front.head"].neck) - FlipX(Frames["body"].neck)));
             }
             if (Frames.ContainsKey("hairAbove"))
             {
                 Pos.Add("hairAbove", new Vector2(0, 0) - (XmlLoader.StaticSprites["default.hairOverHead"].origin + XmlLoader.StaticSprites["default.hairOverHead"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
-                Pos.Add("hairAboveF", new Vector2(0, 0) - (XmlLoader.StaticSprites["default.hairOverHead"].origin + XmlLoader.StaticSprites["default.hairOverHead"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
+                Pos.Add("hairAboveF", new Vector2(0, 0) - (FlipX(XmlLoader.StaticSprites["default.hairOverHead"].origin) + new Vector2(XmlLoader.StaticSprites["default.hairOverHead"].spriteLoc.Width, 0) + FlipX(XmlLoader.StaticSprites["default.hairOverHead"].brow) - FlipX(XmlLoader.StaticSprites["front.head"].brow) + FlipX(XmlLoader.StaticSprites["front.head"].neck) - FlipX(Frames["body"].neck)));
             }
             if (Frames.ContainsKey("face"))
             {
                 Pos.Add("face", new Vector2(0, 0) - (XmlLoader.StaticSprites["default.face"].origin + XmlLoader.StaticSprites["default.face"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
-                Pos.Add("faceF", new Vector2(0, 0) - (XmlLoader.StaticSprites["default.face"].origin + FlipX(XmlLoader.StaticSprites["default.face"].brow) - FlipX(XmlLoader.StaticSprites["front.head"].brow) + FlipX(XmlLoader.StaticSprites["front.head"].neck) - FlipX(Frames["body"].neck)));
+                Pos.Add("faceF", new Vector2(0, 0) - (FlipX(XmlLoader.StaticSprites["default.face"].origin) + new Vector2(XmlLoader.StaticSprites["default.face"].spriteLoc.Width, 0) + FlipX(XmlLoader.StaticSprites["default.face"].brow) - FlipX(XmlLoader.StaticSprites["front.head"].brow) + FlipX(XmlLoader.StaticSprites["front.head"].neck) - FlipX(Frames["body"].neck)));
             }
             if (Frames.ContainsKey("mail"))
             {
@@ -220,6 +220,8 @@ namespace Game1
             LoadAnimation(Animations.Walk2);
             LoadAnimation(Animations.Alert);
             LoadAnimation(Animations.SwingO1);
+            LoadAnimation(Animations.Duck);
+            LoadAnimation(Animations.DuckStab);
         }
 
         public void LoadAnimation(Animations a)

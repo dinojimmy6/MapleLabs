@@ -34,6 +34,8 @@ namespace Game1
             Layers.Add(Animations.Walk2, new List<string> { "effect", "hairBelow", "body", "lGlove", "mail", "head", "arm", "hairAbove", "mailArm", "rGlove", "face", "shoes", "weapon" });
             Layers.Add(Animations.Alert, new List<string> { "effect", "hairBelow", "body", "mail", "head", "arm", "hairAbove", "mailArm", "face", "rHand", "lHand", "rGlove", "lGlove", "shoes", "weapon" });
             Layers.Add(Animations.SwingO1, new List<string> { "effect", "hairBelow", "body", "lGlove", "mail", "head", "arm", "rGlove", "hairAbove", "mailArm", "face", "shoes", "weapon" });
+            Layers.Add(Animations.Duck, new List<string> { "effect", "hairBelow", "body", "lGlove", "mail", "head", "arm", "rGlove", "hairAbove", "mailArm", "face", "shoes", "weapon" });
+            Layers.Add(Animations.DuckStab, new List<string> { "effect", "hairBelow", "body", "lGlove", "mail", "head", "arm", "rGlove", "hairAbove", "mailArm", "face", "shoes", "weapon" });
         }
 
         public static List<string> Layer(this Animations animation)
@@ -182,7 +184,6 @@ namespace Game1
                 }
                 StaticSprites[imgName] = cf;
             }
-
         }
 
         public static void LoadFaceXml(GraphicsDevice gfxd)
