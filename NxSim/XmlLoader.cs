@@ -299,7 +299,15 @@ namespace Game1
                     imgName = imgName == null ? imgNameIn + node.Attributes["name"].Value + "." + frameNum + "." + componentName : imgName;
                     short x = short.Parse(component["vector"].Attributes["x"].Value);
                     short y = short.Parse(component["vector"].Attributes["y"].Value);
-                    ComponentFrame cf = new ComponentFrame(gfxd, imgPath, new Vector2(x, y), et, id, imgName);
+                    ComponentFrame cf;
+                    try
+                    {
+                       cf = new ComponentFrame(gfxd, imgPath, new Vector2(x, y), et, id, imgName);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
                     imgPath = origImgPath;
                     XmlNodeList mapNodes = component.SelectNodes("imgdir[@name='map']");
                     if (mapNodes.Count == 1)
