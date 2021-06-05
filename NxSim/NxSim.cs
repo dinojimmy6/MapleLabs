@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Diagnostics;
 using System.Xml;
 
-namespace Game1
+namespace NxSim
 {
     /// <summary>
     /// This is the main type for your game.
@@ -14,10 +16,13 @@ namespace Game1
         SpriteBatch spriteBatch;
         Character Character;
         Camera Camera;
+        Map map;
 
         public NxSim()
         {
             graphics = new GraphicsDeviceManager(this);
+            //graphics.IsFullScreen = true;
+            IsFixedTimeStep = false;
             Window.AllowUserResizing = true;
         }
 
@@ -32,6 +37,8 @@ namespace Game1
             // TODO: Add your initialization logic here
             this.graphics.PreferredBackBufferHeight = 1080;
             this.graphics.PreferredBackBufferWidth = 1920;
+            this.IsMouseVisible = true;
+            graphics.SynchronizeWithVerticalRetrace = true;
             graphics.ApplyChanges();
             XmlLoader.MapStrings();
             XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Misc, "body");
@@ -44,6 +51,8 @@ namespace Game1
             XmlLoader.LoadFaceXml(GraphicsDevice);
             Character = new Character();
             Camera = new Camera();
+            Camera.SetCharacter(Character);
+            map = new Map(GraphicsDevice);
             base.Initialize();
         }
 
@@ -75,13 +84,13 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            this.IsMouseVisible = true;
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
             Character.HandleInput(Keyboard.GetState());
             Character.Update(gameTime, Keyboard.GetState());
+            Camera.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -94,12 +103,13 @@ namespace Game1
             GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(SpriteSortMode.BackToFront,
+            spriteBatch.Begin(SpriteSortMode.Deferred,
                         BlendState.NonPremultiplied,
                         null,
                         null,
                         null,
                         null, Camera.Transform);
+            map.DrawMap(spriteBatch);
             Character.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);

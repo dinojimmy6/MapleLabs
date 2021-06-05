@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Game1
+namespace NxSim
 {
     class CharacterFrame
     {
@@ -134,11 +134,11 @@ namespace Game1
             return new Vector2(-pos.X, pos.Y);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Animations animation, bool facingRight)
+        public void Draw(SpriteBatch spriteBatch, Animations animation, Vector2 position, bool facingRight)
         {
             foreach(string layer in animation.Layer())
             {
-                Draw(spriteBatch, layer, facingRight);
+                Draw(spriteBatch, layer, position, facingRight);
             }
         }
 
@@ -154,12 +154,12 @@ namespace Game1
             return pre + "." + frame + "." + post;
         }
 
-        private void Draw(SpriteBatch spriteBatch, string componentName, bool facingRight)
+        private void Draw(SpriteBatch spriteBatch, string componentName, Vector2 position, bool facingRight)
         {
             if(Frames.ContainsKey(componentName) && Pos.ContainsKey(componentName))
             {
                 SpriteEffects flip = facingRight ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                Rectangle destRect = new Rectangle(Convert.ToInt32(Pos[facingRight ? componentName + "F" : componentName].X), Convert.ToInt32(Pos[facingRight ? componentName + "F" : componentName].Y), (int) Frames[componentName].spriteLoc.Width, (int) Frames[componentName].spriteLoc.Height);
+                Rectangle destRect = new Rectangle(Convert.ToInt32(Pos[facingRight ? componentName + "F" : componentName].X + position.X), Convert.ToInt32(Pos[facingRight ? componentName + "F" : componentName].Y + position.Y), (int) Frames[componentName].spriteLoc.Width, (int) Frames[componentName].spriteLoc.Height);
                 Rectangle srcRect = new Rectangle((int)Frames[componentName].spriteLoc.X, (int)Frames[componentName].spriteLoc.Y, (int)Frames[componentName].spriteLoc.Width, (int)Frames[componentName].spriteLoc.Height);
                 spriteBatch.Draw(Frames[componentName].Sprite, destRect, srcRect, Color.White, 0f, new Vector2(0, 0), flip, 0f);
             }
@@ -168,9 +168,9 @@ namespace Game1
 
     class CharacterModel
     {
-        private Dictionary<Animations, List<CharacterFrame>> AnimationBooks = new Dictionary<Animations, List<CharacterFrame>>();
+        private Dictionary<Animations, List<CharacterFrame>> AnimationBooks = new();
         public Animations currentAnimation = Animations.Walk;
-        TimeSpan timeIntoAnimation;
+        public TimeSpan timeIntoAnimation;
 
         TimeSpan Duration
         {
