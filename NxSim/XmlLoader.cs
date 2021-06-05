@@ -7,7 +7,7 @@ using System.Linq;
 using System.Xml;
 
 
-namespace Game1
+namespace NxSim
 {
     public enum Animations
     {
