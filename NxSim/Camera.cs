@@ -38,11 +38,8 @@ namespace NxSim
 
         public void Update(GameTime gameTime)
         {
-            if (Math.Abs(this.position.X - character.Position.X) > 1)
-            {
-                this.position = SmoothCD(this.position, character.Position, ref velocity, 0.4F, Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds));
-                this.UpdateTransform();
-            }
+            this.position = SmoothCD(this.position, character.Position, ref velocity, 0.4F, Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds));
+            this.UpdateTransform();
         }
 
         private Vector2 SmoothCD(Vector2 from, Vector2 to, ref Vector2 currentVelocity, float smoothTime, float deltaTime, float maxSpeed = Single.PositiveInfinity)

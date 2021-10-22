@@ -22,7 +22,9 @@ namespace NxSim
         {
             graphics = new GraphicsDeviceManager(this);
             //graphics.IsFullScreen = true;
-            IsFixedTimeStep = false;
+            IsFixedTimeStep = true;
+            float targetFPS = 60.0f;
+            TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0f / targetFPS);
             Window.AllowUserResizing = true;
         }
 
@@ -37,7 +39,7 @@ namespace NxSim
             this.graphics.PreferredBackBufferHeight = 1080;
             this.graphics.PreferredBackBufferWidth = 1920;
             this.IsMouseVisible = true;
-            graphics.SynchronizeWithVerticalRetrace = true;
+            graphics.SynchronizeWithVerticalRetrace = false;
             graphics.ApplyChanges();
             XmlLoader.MapStrings();
             XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Misc, "body");
