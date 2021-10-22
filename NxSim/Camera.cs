@@ -18,7 +18,7 @@ namespace NxSim
         {
             Zoom = 1.5f;
             Rotation = 0.0f;
-            Position = new Vector2(0, 0);
+            Position = new Vector2(705, -1184);
             velocity = Vector2.Zero;
             UpdateTransform();
         }

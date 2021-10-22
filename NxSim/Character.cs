@@ -18,7 +18,7 @@ namespace NxSim
         {
             this.CharacterModel = new CharacterModel();
             this.stateHandler = new StateHandler(this);
-            this.position = Vector2.Zero;
+            this.position = new Vector2(705, 1184);
             this.velocity = new(Vector2.Zero);
             this.facingRight = false;
         }

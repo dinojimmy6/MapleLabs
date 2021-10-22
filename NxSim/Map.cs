@@ -12,7 +12,7 @@ namespace NxSim
         public Map(GraphicsDevice gfxd)
         {
             FileStream fileStream = new FileStream("wz\\cake.png", FileMode.Open);
-            backFrags.Add(new MapFrag(Texture2D.FromStream(gfxd, fileStream), new Vector2(-705, -1335), 0));
+            backFrags.Add(new MapFrag(Texture2D.FromStream(gfxd, fileStream), new Vector2(0, 0), 0));
         }
 
         public void DrawMap(SpriteBatch spriteBatch)
