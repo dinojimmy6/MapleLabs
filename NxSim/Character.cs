@@ -2,25 +2,25 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using States;
 
-namespace Game1
+namespace NxSim
 {
     class Character
     {
-        public ICharacterState currentState;
+        private readonly StateHandler stateHandler;
         public CharacterModel characterModel;
-        public bool facingRight;
+        private Vector2 position;
+        private Velocity velocity;
+        private bool facingRight;
 
         public Character()
         {
             this.CharacterModel = new CharacterModel();
-            this.CurrentState = new IdleState();
-            this.CurrentState.Enter(this);
-            facingRight = false;
+            this.stateHandler = new StateHandler(this);
+            this.position = new Vector2(705, 1184);
+            this.velocity = new(Vector2.Zero);
+            this.facingRight = false;
         }
 
         public void UpdateModel()
@@ -30,8 +30,7 @@ namespace Game1
 
         public void HandleInput(KeyboardState keyboardState)
         {
-            this.CurrentState = this.CurrentState.HandleInput(keyboardState, this);
-            this.CurrentState.Enter(this);
+            this.StateHandler.HandleInput(keyboardState);
         }
 
         public void SetAnimation(Animations a)
@@ -41,12 +40,19 @@ namespace Game1
 
         public void Update(GameTime gameTime, KeyboardState KeyboardState)
         {
+            this.position.X += Convert.ToSingle(this.Velocity.Speed.X * gameTime.ElapsedGameTime.TotalSeconds);
+            this.position.Y += Convert.ToSingle(this.Velocity.Speed.Y * gameTime.ElapsedGameTime.TotalSeconds);
             this.CharacterModel.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            CharacterModel.CurrentFrame.Draw(spriteBatch, CharacterModel.currentAnimation, facingRight);
+            CharacterModel.CurrentFrame.Draw(spriteBatch, CharacterModel.currentAnimation, this.position, facingRight);
+        }
+
+        public StateHandler StateHandler
+        {
+            get { return this.stateHandler; }
         }
 
         public bool FacingRight
@@ -55,15 +61,21 @@ namespace Game1
             set { this.facingRight = value; }
         }
 
-        public ICharacterState CurrentState
-        {
-            get { return this.currentState; }
-            set { this.currentState = value; }
-        }
         public CharacterModel CharacterModel
         {
             get { return this.characterModel; }
             set { this.characterModel = value; }
+        }
+
+        public Vector2 Position
+        {
+            get { return this.position; }
+        }
+
+        public Velocity Velocity
+        {
+            get { return this.velocity; }
+            set { this.velocity = value; }
         }
     }
 }

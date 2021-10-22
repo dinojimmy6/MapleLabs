@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Game1
+namespace NxSim
 {
     /// <summary>
     /// The main class.
