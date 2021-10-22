@@ -111,4 +111,35 @@ namespace Game1
             chr.SetAnimation(Animations.Duck);
         }
     }
+
+    class DuckStabState : ICharacterState
+    {
+        long casting;
+        long castTime;
+        public DuckStabState()
+        {
+            casting = 0;
+            castTime = 1000;
+        }
+
+        public ICharacterState HandleInput(KeyboardState keyboardState, Character chr)
+        {
+            if (casting != 0 && keyboardState.GetPressedKeys().Contains(Keys.A))
+            {
+                casting = 0;
+                return chr.CurrentState;
+            }
+            return new IdleState();
+        }
+
+        public void Update(KeyboardState KeyboardState, Character chr)
+        {
+
+        }
+
+        public void Enter(Character chr)
+        {
+            chr.SetAnimation(Animations.DuckStab);
+        }
+    }
 }
