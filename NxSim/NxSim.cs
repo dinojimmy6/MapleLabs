@@ -29,7 +29,6 @@ namespace Game1
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             this.graphics.PreferredBackBufferHeight = 1080;
             this.graphics.PreferredBackBufferWidth = 1920;
             graphics.ApplyChanges();
@@ -39,8 +38,8 @@ namespace Game1
             XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Shoes, "01073382");
             XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Glove, "01082223");
             XmlLoader.LoadWeaponXml(GraphicsDevice, EquipTypes.Weapon, "01702920", "30");
-            XmlLoader.LoadHeadXml(GraphicsDevice);
-            XmlLoader.LoadHairXml(GraphicsDevice);
+            XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Misc, "head");
+            XmlLoader.LoadXml(GraphicsDevice, EquipTypes.Misc, "00041656");
             XmlLoader.LoadFaceXml(GraphicsDevice);
             Character = new Character();
             Camera = new Camera();

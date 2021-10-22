@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,13 +27,13 @@ namespace Game1
 
         static AnimationsExtensions()
         {
-            Layers.Add(Animations.Idle, new List<string> { "effect", "hairBelow", "body", "lGlove", "mail", "head", "arm", "rGlove", "hairAbove", "mailArm", "face", "shoes", "weapon" });
-            Layers.Add(Animations.Walk, new List<string> { "effect", "hairBelow", "body", "lGlove", "mail", "head", "arm", "rGlove", "hairAbove", "mailArm", "face", "shoes", "weapon" });
-            Layers.Add(Animations.Walk2, new List<string> { "effect", "hairBelow", "body", "lGlove", "mail", "head", "arm", "hairAbove", "mailArm", "rGlove", "face", "shoes", "weapon" });
-            Layers.Add(Animations.Alert, new List<string> { "effect", "hairBelow", "body", "mail", "head", "arm", "hairAbove", "mailArm", "face", "rHand", "lHand", "rGlove", "lGlove", "shoes", "weapon" });
-            Layers.Add(Animations.SwingO1, new List<string> { "effect", "hairBelow", "body", "lGlove", "mail", "head", "arm", "rGlove", "hairAbove", "mailArm", "face", "shoes", "weapon" });
-            Layers.Add(Animations.Duck, new List<string> { "effect", "hairBelow", "body", "lGlove", "mail", "head", "arm", "rGlove", "hairAbove", "mailArm", "face", "shoes", "weapon" });
-            Layers.Add(Animations.DuckStab, new List<string> { "effect", "hairBelow", "body", "lGlove", "mail", "head", "arm", "rGlove", "hairAbove", "mailArm", "face", "shoes", "weapon" });
+            Layers.Add(Animations.Idle, new List<string> { "effect", "hairBelowBody", "body", "lGlove", "mail", "head", "arm", "rGlove", "hairOverHead", "mailArm", "face", "shoes", "weapon" });
+            Layers.Add(Animations.Walk, new List<string> { "effect", "hairBelowBody", "body", "lGlove", "mail", "head", "arm", "rGlove", "hairOverHead", "mailArm", "face", "shoes", "weapon" });
+            Layers.Add(Animations.Walk2, new List<string> { "effect", "hairBelowBody", "body", "lGlove", "mail", "head", "arm", "hairAbove", "mailArm", "rGlove", "face", "shoes", "weapon" });
+            Layers.Add(Animations.Alert, new List<string> { "effect", "hairBelowBody", "body", "mail", "head", "arm", "hairAbove", "mailArm", "face", "rHand", "lHand", "rGlove", "lGlove", "shoes", "weapon" });
+            Layers.Add(Animations.SwingO1, new List<string> { "effect", "hairBelowBody", "body", "lGlove", "mail", "head", "arm", "rGlove", "hairOverHead", "mailArm", "face", "shoes", "weapon" });
+            Layers.Add(Animations.Duck, new List<string> { "effect", "hairBelowBody", "body", "lGlove", "mail", "head", "arm", "rGlove", "hairOverHead", "mailArm", "face", "shoes", "weapon" });
+            Layers.Add(Animations.DuckStab, new List<string> { "effect", "hairBelowBody", "body", "lGlove", "mail", "head", "arm", "rGlove", "hairOverHead", "mailArm", "face", "shoes", "weapon" });
         }
 
         public static List<string> Layer(this Animations animation)
@@ -53,6 +51,9 @@ namespace Game1
         static Skeleton()
         {
             Sk.Add("effect", new Dictionary<Animations, Dictionary<int, ComponentFrame>>());
+            Sk.Add("hairOverHead", new Dictionary<Animations, Dictionary<int, ComponentFrame>>());
+            Sk.Add("hairBelowBody", new Dictionary<Animations, Dictionary<int, ComponentFrame>>());
+            Sk.Add("head", new Dictionary<Animations, Dictionary<int, ComponentFrame>>());
             Sk.Add("arm", new Dictionary<Animations, Dictionary<int, ComponentFrame>>());
             Sk.Add("body", new Dictionary<Animations, Dictionary<int, ComponentFrame>>());
             Sk.Add("rHand", new Dictionary<Animations, Dictionary<int, ComponentFrame>>());
@@ -102,7 +103,6 @@ namespace Game1
                     LoadAnimation(node, gfxd, et, id, null);
                 }
             }
-
         }
 
         public static void LoadWeaponXml(GraphicsDevice gfxd, EquipTypes et, string id, string weaponBase)
@@ -135,61 +135,11 @@ namespace Game1
             }
         }
 
-        public static void LoadHeadXml(GraphicsDevice gfxd)
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.Load("wz\\Misc\\head.img.xml");
-            XmlNode front = doc["xmldump"]["wzimg"].SelectNodes("imgdir[@name='front']")[0]["canvas"];
-            string imgName = "front.head";
-            short x = short.Parse(front["vector"].Attributes["x"].Value);
-            short y = short.Parse(front["vector"].Attributes["y"].Value);
-            ComponentFrame cf = new ComponentFrame(gfxd, "wz\\Misc\\head.atlas.png", new Vector2(x, y), EquipTypes.Misc, "head", imgName);
-            XmlNodeList mapNodes = front.SelectNodes("imgdir[@name='map']");
-            if (mapNodes.Count == 1)
-            {
-                XmlNodeList neck = mapNodes[0].SelectNodes("vector[@name='neck']");
-                if (neck.Count == 1)
-                {
-                    cf.neck = new Vector2(short.Parse(neck[0].Attributes["x"].Value), short.Parse(neck[0].Attributes["y"].Value));
-                }
-                XmlNodeList brow = mapNodes[0].SelectNodes("vector[@name='brow']");
-                if (brow.Count == 1)
-                {
-                    cf.brow = new Vector2(short.Parse(brow[0].Attributes["x"].Value), short.Parse(brow[0].Attributes["y"].Value));
-                }
-            }
-            StaticSprites[imgName] = cf;
-        }
-
-        public static void LoadHairXml(GraphicsDevice gfxd)
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.Load("wz\\Misc\\00041656.img.xml");
-            XmlNode default_ = doc["xmldump"]["wzimg"].SelectNodes("imgdir[@name='default']")[0];
-            foreach (XmlNode component in default_.SelectNodes("canvas"))
-            {
-                string componentName = component.Attributes["name"].Value;
-                string imgName = "default" + "." + componentName;
-                short x = short.Parse(component["vector"].Attributes["x"].Value);
-                short y = short.Parse(component["vector"].Attributes["y"].Value);
-                ComponentFrame cf = new ComponentFrame(gfxd, "wz\\Misc\\00041656.atlas.png", new Vector2(x, y), EquipTypes.Misc, "00041656", imgName);
-                XmlNodeList mapNodes = component.SelectNodes("imgdir[@name='map']");
-                if (mapNodes.Count == 1)
-                {
-                    XmlNodeList brow = mapNodes[0].SelectNodes("vector[@name='brow']");
-                    if (brow.Count == 1)
-                    {
-                        cf.brow = new Vector2(short.Parse(brow[0].Attributes["x"].Value), short.Parse(brow[0].Attributes["y"].Value));
-                    }
-                }
-                StaticSprites[imgName] = cf;
-            }
-        }
-
         public static void LoadFaceXml(GraphicsDevice gfxd)
         {
+            string imgPathBase = "wz\\Face\\00020644";
             XmlDocument doc = new XmlDocument();
-            doc.Load("wz\\Face\\00020644.img.xml");
+            doc.Load(imgPathBase + ".img.xml");
             XmlNode default_ = doc["imgdir"].SelectNodes("imgdir[@name='default']")[0];
             foreach (XmlNode component in default_.SelectNodes("canvas"))
             {
@@ -218,7 +168,7 @@ namespace Game1
                     string componentName = component.Attributes["name"].Value;
                     string imgName = ResolveInLink(component);
                     string outLink = ResolveOutLink(component);
-                    string imgPath = "wz\\Face\\00020644.atlas.png";
+                    string imgPath = imgPathBase + ".atlas.png";
                     string id = "00020644";
                     if (outLink != null)
                     {
@@ -282,6 +232,10 @@ namespace Game1
                 {   
                     XmlNode component = componentMap[componentMapName];
                     string componentName = component.Attributes["name"].Value;
+                    if (componentName == "hairShade")
+                    {
+                        continue;
+                    }
                     if (!Books.ContainsKey(componentMapName))
                     {
                         Books.Add(componentMapName, new Dictionary<int, ComponentFrame>());
@@ -299,7 +253,15 @@ namespace Game1
                     imgName = imgName == null ? imgNameIn + node.Attributes["name"].Value + "." + frameNum + "." + componentName : imgName;
                     short x = short.Parse(component["vector"].Attributes["x"].Value);
                     short y = short.Parse(component["vector"].Attributes["y"].Value);
-                    ComponentFrame cf = new ComponentFrame(gfxd, imgPath, new Vector2(x, y), et, id, imgName);
+                    ComponentFrame cf;
+                    try
+                    {
+                       cf = new ComponentFrame(gfxd, imgPath, new Vector2(x, y), et, id, imgName);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
                     imgPath = origImgPath;
                     XmlNodeList mapNodes = component.SelectNodes("imgdir[@name='map']");
                     if (mapNodes.Count == 1)
@@ -324,10 +286,15 @@ namespace Game1
                         {
                             cf.handMove = new Vector2(short.Parse(handMove[0].Attributes["x"].Value), short.Parse(handMove[0].Attributes["y"].Value));
                         }
+                        XmlNodeList brow = mapNodes[0].SelectNodes("vector[@name='brow']");
+                        if (brow.Count == 1)
+                        {
+                            cf.brow = new Vector2(short.Parse(brow[0].Attributes["x"].Value), short.Parse(brow[0].Attributes["y"].Value));
+                        }
                     }
                     Books[componentMapName].Add(Int32.Parse(frameNum), cf);
                 }
-                if (node.SelectNodes("int[@name='delay']") != null && !Skeleton.Duration.ContainsKey(animation))
+                if (frame.SelectNodes("int[@name='delay']").Count > 0 && !Skeleton.Duration.ContainsKey(animation))
                 {
                     delays.Add(Int32.Parse(frame.SelectNodes("int[@name='delay']")[0].Attributes["value"].Value));
                 }

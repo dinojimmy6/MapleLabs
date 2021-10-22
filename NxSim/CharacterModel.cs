@@ -25,10 +25,9 @@ namespace Game1
             LoadFrameData("rGlove", animation, frame);
             LoadFrameData("lGlove", animation, frame);
             LoadFrameData("weapon", animation, frame);
-
-            Frames.Add("head", XmlLoader.StaticSprites["front.head"]);
-            Frames.Add("hairBelow", XmlLoader.StaticSprites["default.hairBelowBody"]);
-            Frames.Add("hairAbove", XmlLoader.StaticSprites["default.hairOverHead"]);
+            LoadFrameData("head", animation, frame);
+            LoadFrameData("hairOverHead", animation, frame);
+            LoadFrameData("hairBelowBody", animation, frame);
             Frames.Add("face", XmlLoader.StaticSprites["default.face"]);
 
             if (Frames.ContainsKey("effect"))
@@ -36,10 +35,10 @@ namespace Game1
                 Pos.Add("effect", new Vector2(0, 0) - (Frames["effect"].origin + Frames["effect"].navel - Frames["body"].navel));
                 Pos.Add("effectF", new Vector2(0, 0) - (FlipX(Frames["effect"].origin) + new Vector2(Frames["effect"].spriteLoc.Width, 0) + FlipX(Frames["effect"].navel) - FlipX(Frames["body"].navel)));
             }
-            if (Frames.ContainsKey("hairBelow"))
+            if (Frames.ContainsKey("hairBelowBody"))
             {
-                Pos.Add("hairBelow", new Vector2(0, 0) - (XmlLoader.StaticSprites["default.hairBelowBody"].origin + XmlLoader.StaticSprites["default.hairBelowBody"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
-                Pos.Add("hairBelowF", new Vector2(0, 0) - (FlipX(XmlLoader.StaticSprites["default.hairBelowBody"].origin) + new Vector2(XmlLoader.StaticSprites["default.hairBelowBody"].spriteLoc.Width, 0) + FlipX(XmlLoader.StaticSprites["default.hairBelowBody"].brow) - FlipX(XmlLoader.StaticSprites["front.head"].brow) + FlipX(XmlLoader.StaticSprites["front.head"].neck) - FlipX(Frames["body"].neck)));
+                Pos.Add("hairBelowBody", new Vector2(0, 0) - (Frames["hairBelowBody"].origin + Frames["hairBelowBody"].brow - Frames["head"].brow + Frames["head"].neck - Frames["body"].neck));
+                Pos.Add("hairBelowBodyF", new Vector2(0, 0) - (FlipX(Frames["hairBelowBody"].origin) + new Vector2(Frames["hairBelowBody"].spriteLoc.Width, 0) + FlipX(Frames["hairBelowBody"].brow) - FlipX(Frames["head"].brow) + FlipX(Frames["head"].neck) - FlipX(Frames["body"].neck)));
             }
             if (Frames.ContainsKey("body"))
             {
@@ -63,18 +62,18 @@ namespace Game1
             }
             if (Frames.ContainsKey("head"))
             {
-                Pos.Add("head", new Vector2(0, 0) - (XmlLoader.StaticSprites["front.head"].origin + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
-                Pos.Add("headF", new Vector2(0, 0) - (FlipX(XmlLoader.StaticSprites["front.head"].origin) + new Vector2(XmlLoader.StaticSprites["front.head"].spriteLoc.Width, 0) + FlipX(XmlLoader.StaticSprites["front.head"].neck) - FlipX(Frames["body"].neck)));
+                Pos.Add("head", new Vector2(0, 0) - (Frames["head"].origin + Frames["head"].neck - Frames["body"].neck));
+                Pos.Add("headF", new Vector2(0, 0) - (FlipX(Frames["head"].origin) + new Vector2(Frames["head"].spriteLoc.Width, 0) + FlipX(Frames["head"].neck) - FlipX(Frames["body"].neck)));
             }
-            if (Frames.ContainsKey("hairAbove"))
+            if (Frames.ContainsKey("hairOverHead"))
             {
-                Pos.Add("hairAbove", new Vector2(0, 0) - (XmlLoader.StaticSprites["default.hairOverHead"].origin + XmlLoader.StaticSprites["default.hairOverHead"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
-                Pos.Add("hairAboveF", new Vector2(0, 0) - (FlipX(XmlLoader.StaticSprites["default.hairOverHead"].origin) + new Vector2(XmlLoader.StaticSprites["default.hairOverHead"].spriteLoc.Width, 0) + FlipX(XmlLoader.StaticSprites["default.hairOverHead"].brow) - FlipX(XmlLoader.StaticSprites["front.head"].brow) + FlipX(XmlLoader.StaticSprites["front.head"].neck) - FlipX(Frames["body"].neck)));
+                Pos.Add("hairOverHead", new Vector2(0, 0) - (Frames["hairOverHead"].origin + Frames["hairOverHead"].brow - Frames["head"].brow + Frames["head"].neck - Frames["body"].neck));
+                Pos.Add("hairOverHeadF", new Vector2(0, 0) - (FlipX(Frames["hairOverHead"].origin) + new Vector2(Frames["hairOverHead"].spriteLoc.Width, 0) + FlipX(Frames["hairOverHead"].brow) - FlipX(Frames["head"].brow) + FlipX(Frames["head"].neck) - FlipX(Frames["body"].neck)));
             }
             if (Frames.ContainsKey("face"))
             {
-                Pos.Add("face", new Vector2(0, 0) - (XmlLoader.StaticSprites["default.face"].origin + XmlLoader.StaticSprites["default.face"].brow - XmlLoader.StaticSprites["front.head"].brow + XmlLoader.StaticSprites["front.head"].neck - Frames["body"].neck));
-                Pos.Add("faceF", new Vector2(0, 0) - (FlipX(XmlLoader.StaticSprites["default.face"].origin) + new Vector2(XmlLoader.StaticSprites["default.face"].spriteLoc.Width, 0) + FlipX(XmlLoader.StaticSprites["default.face"].brow) - FlipX(XmlLoader.StaticSprites["front.head"].brow) + FlipX(XmlLoader.StaticSprites["front.head"].neck) - FlipX(Frames["body"].neck)));
+                Pos.Add("face", new Vector2(0, 0) - (Frames["face"].origin + Frames["face"].brow - Frames["head"].brow + Frames["head"].neck - Frames["body"].neck));
+                Pos.Add("faceF", new Vector2(0, 0) - (FlipX(XmlLoader.StaticSprites["default.face"].origin) + new Vector2(XmlLoader.StaticSprites["default.face"].spriteLoc.Width, 0) + FlipX(XmlLoader.StaticSprites["default.face"].brow) - FlipX(Frames["head"].brow) + FlipX(Frames["head"].neck) - FlipX(Frames["body"].neck)));
             }
             if (Frames.ContainsKey("mail"))
             {
@@ -111,7 +110,6 @@ namespace Game1
 
         private void LoadFrameData(string componentName, Animations animation, int frame)
         {
-            var ret = new Dictionary<string, ComponentFrame>();
             if(!Skeleton.Sk.ContainsKey(componentName))
             {
                 return;
