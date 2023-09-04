@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using NxSim;
+using System;
 
 namespace States
 {
@@ -13,7 +14,11 @@ namespace States
 
         public void HandleInput(KeyboardState kbs, Character chr)
         {
-            if (kbs.IsKeyDown(Keys.Right) || kbs.IsKeyDown(Keys.Left))
+            if (kbs.IsKeyDown(Keys.Space))
+            {
+                chr.StateHandler.Push(chr.StateHandler.jump);
+            }
+            else if (kbs.IsKeyDown(Keys.Right) || kbs.IsKeyDown(Keys.Left))
             {
                 chr.StateHandler.Push(chr.StateHandler.walk);
                 return;
@@ -31,11 +36,11 @@ namespace States
 
         public void Update(KeyboardState kbs, Character chr)
         {
+            chr.Velocity.UpdateX((float) Math.Truncate(chr.Velocity.X * 0.1));
         }
 
         public void Enter(Character chr)
         {
-            chr.Velocity = new Velocity(Vector2.Zero);
             chr.SetAnimation(Animations.Idle);
         }
 

@@ -7,18 +7,34 @@ namespace NxSim
         private Vector2 speed;
         public Velocity(Vector2 speed)
         {
-            this.Speed = speed;
+            this.speed = speed;
         }
 
-        public void Update()
+        public void UpdateX(float x)
         {
-            
+            this.speed.X = x;
         }
 
-        public Vector2 Speed
+        public void UpdateY(float y)
         {
-            get { return this.speed; }
-            set { this.speed = value; }
+            this.speed.Y = y;
+        }
+
+        public void Update(float x, float y)
+        {
+            this.UpdateX(x);
+            this.UpdateY(y);
+        }
+
+        public float X {
+            get => this.speed.X;
+            set => this.speed.X = value;
+        }
+
+        public float Y
+        {
+            get => this.speed.Y;
+            set => this.speed.Y = value;
         }
     }
 }

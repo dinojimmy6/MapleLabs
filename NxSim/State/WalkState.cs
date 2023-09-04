@@ -13,16 +13,20 @@ namespace States
 
         public void HandleInput(KeyboardState kbs, Character chr)
         {
-            if (kbs.IsKeyDown(Keys.Right))
+            if (kbs.IsKeyDown(Keys.Space))
+            {
+                chr.StateHandler.Push(chr.StateHandler.jump);
+            }
+            else if (kbs.IsKeyDown(Keys.Right))
             {
                 chr.FacingRight = true;
-                chr.Velocity = new Velocity(new Vector2(200, 0));
+                chr.Velocity.UpdateX(200);
                 return;
             }
             else if (kbs.IsKeyDown(Keys.Left))
             {
                 chr.FacingRight = false;
-                chr.Velocity = new Velocity(new Vector2(-200, 0));
+                chr.Velocity.UpdateX(-200);
                 return;
             }
             else
