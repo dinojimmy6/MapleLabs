@@ -9,7 +9,6 @@ namespace States
     class StateHandler
     {
         private readonly Stack<ICharacterState> pda = new();
-        private readonly Character character;
 
         //State pool
         public ICharacterState idle;
@@ -17,34 +16,33 @@ namespace States
         public ICharacterState duck;
         public ICharacterState jump;
 
-        public StateHandler(Character c)
+        public StateHandler(Character chr)
         {
             this.InitializeStates();
-            this.character = c;
-            this.Push(this.idle);
+            this.Push(this.idle, chr);
         }
 
         //probably pull from command queue after input handler is implemented
-        public void HandleInput(KeyboardState kbs)
+        public void HandleInput(Character chr, InputComponent input)
         {
-            this.pda.Peek().HandleInput(kbs, this.character);
+            this.pda.Peek().HandleInput(chr, input);
         }
 
-        public void Update(KeyboardState kbs, Character chr)
+        public void Update(Character chr)
         {
-            this.pda.Peek().Update(kbs, chr);
+            this.pda.Peek().Update(chr);
         }
 
-        public void Push(ICharacterState s)
+        public void Push(ICharacterState s, Character chr)
         {
-            s.Enter(this.character);
+            s.Enter(chr);
             this.pda.Push(s);
         }
 
-        public void Pop()
+        public void Pop(Character chr)
         {
             this.pda.Pop();
-            this.pda.Peek().Reenter(this.character);
+            this.pda.Peek().Reenter(chr);
         }
 
         private void InitializeStates()

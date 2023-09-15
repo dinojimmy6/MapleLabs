@@ -11,19 +11,19 @@ namespace States
 
         }
 
-        public void HandleInput(KeyboardState kbs, Character chr)
+        public void HandleInput(Character chr, InputComponent input)
         {
-            if (kbs.IsKeyDown(Keys.Space))
+            if (input.IsHeld(Actions.Jump))
             {
-                chr.StateHandler.Push(chr.StateHandler.jump);
+                chr.StateHandler.Push(chr.StateHandler.jump, chr);
             }
-            else if (kbs.IsKeyDown(Keys.Right))
+            else if (input.IsHeld(Actions.WalkRight))
             {
                 chr.FacingRight = true;
                 chr.Velocity.UpdateX(200);
                 return;
             }
-            else if (kbs.IsKeyDown(Keys.Left))
+            else if (input.IsHeld(Actions.WalkLeft))
             {
                 chr.FacingRight = false;
                 chr.Velocity.UpdateX(-200);
@@ -31,11 +31,11 @@ namespace States
             }
             else
             {
-                chr.StateHandler.Pop();
+                chr.StateHandler.Pop(chr);
             }
         }
 
-        public void Update(KeyboardState kbs, Character chr)
+        public void Update(Character chr)
         {
 
         }

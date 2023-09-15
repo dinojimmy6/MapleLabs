@@ -5,14 +5,16 @@ using NxSim.Physics.Collision;
 using States;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace NxSim
 {
     class Character
     {
         private readonly StateHandler stateHandler;
+        private readonly InputComponent inputComponent;
         public CharacterModel characterModel;
-        private Vector2 position;
+        private readonly LinkedList<Vector2> positions;
         private Velocity velocity;
         private bool facingRight;
         private bool isGrounded;
@@ -23,7 +25,9 @@ namespace NxSim
         {
             this.CharacterModel = new CharacterModel();
             this.stateHandler = new StateHandler(this);
-            this.position = new Vector2(400, 1000);
+            this.inputComponent = new InputComponent();
+            this.positions = new();
+            this.Position = new Vector2(400, 1000);
             this.velocity = new(new Vector2(0, 10));
             this.facingRight = false;
             this.IsGrounded = false;
@@ -38,9 +42,10 @@ namespace NxSim
             CharacterModel = new CharacterModel();
         }
 
-        public void HandleInput(KeyboardState keyboardState)
+        public void HandleInput()
         {
-            this.StateHandler.HandleInput(keyboardState);
+            this.inputComponent.Update();
+            this.StateHandler.HandleInput(this, this.inputComponent);
         }
 
         public void SetAnimation(Animations a)
@@ -48,11 +53,11 @@ namespace NxSim
             this.CharacterModel.currentAnimation = a;
         }
 
-        public void Update(GameTime gameTime, KeyboardState kbs)
+        public void Update(float dT)
         {
-            var src = new Vector2(this.position.X, this.position.Y - 5);
-            var dest_x = this.position.X + Convert.ToSingle(this.Velocity.X * gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
-            var dest_y = this.position.Y + Convert.ToSingle(this.Velocity.Y * gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
+            var src = new Vector2(this.Position.X, this.Position.Y - 5);
+            var dest_x = this.Position.X + ((float) (this.Velocity.X * dT / 1000));
+            var dest_y = this.Position.Y + ((float) (this.Velocity.Y * dT / 1000));
             var dest = new Vector2(dest_x, dest_y);
             Line movement = new(src, dest);
             if (this.Velocity.Y >= 0)
@@ -62,22 +67,23 @@ namespace NxSim
                     var intersect = movement.GetIntersection(l);
                     if (!float.IsInfinity(intersect.X))
                     {
-                        System.Diagnostics.Debug.WriteLine(intersect.X.ToString());
-                        System.Diagnostics.Debug.WriteLine(intersect.Y.ToString());
+                        //System.Diagnostics.Debug.WriteLine(intersect.X.ToString());
+                        //System.Diagnostics.Debug.WriteLine(intersect.Y.ToString());
                         dest.Y = intersect.Y;
                         this.IsGrounded = true;
                     }
                 }
             }
-            this.position = dest;
-            this.CharacterModel.Update(gameTime);
-            this.stateHandler.Update(kbs, this);
+            this.Position = dest;
+            this.CharacterModel.Update(dT);
+            this.StateHandler.Update(this);
             this.Velocity.Y += 25;
+            Debug.WriteLine(this.Position.X - this.LastPosition.X);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, float alpha)
         {
-            CharacterModel.CurrentFrame.Draw(spriteBatch, CharacterModel.currentAnimation, this.position, facingRight);
+            CharacterModel.CurrentFrame.Draw(spriteBatch, CharacterModel.currentAnimation, Vector2.Lerp(this.LastPosition, this.Position, alpha), facingRight);
         }
 
         public StateHandler StateHandler
@@ -99,7 +105,23 @@ namespace NxSim
 
         public Vector2 Position
         {
-            get { return this.position; }
+            get { return this.positions.First.Value; }
+            set
+            {
+                this.positions.AddFirst(value);
+                if (this.positions.Count > 5)
+                {
+                    this.positions.RemoveLast();
+                }
+            }
+        }
+
+        public Vector2 LastPosition
+        {
+            get
+            {
+                return this.positions.First.Next == null ? this.positions.First.Value : this.positions.First.Next.Value;
+            }
         }
 
         public Velocity Velocity

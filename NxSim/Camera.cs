@@ -36,9 +36,9 @@ namespace NxSim
                  Matrix.CreateTranslation(new Vector3(1920 * 0.5f, 1080 * 0.5f + 260, 0));//shift entire scene to middle of screen 
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, float alpha)
         {
-            this.position = SmoothCD(this.position, character.Position, ref velocity, 0.4F, Convert.ToSingle(gameTime.ElapsedGameTime.TotalSeconds));
+            this.position = SmoothCD(this.position, Vector2.Lerp(character.LastPosition, character.Position, alpha), ref velocity, 0.4F, (float) gameTime.ElapsedGameTime.TotalSeconds);
             this.UpdateTransform();
         }
 

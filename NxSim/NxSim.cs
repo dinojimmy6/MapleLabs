@@ -17,15 +17,28 @@ namespace NxSim
         Character Character;
         Camera Camera;
         Map map;
+        // this will be the FixedUpdate frequency, we set it to 30 FPS
+        private float fixedTimestep = 30f;
+
+        // helper variables for the fixed update
+        private float previousT = 0;
+        private float accumulator = 0.0f;
+        private readonly float maxFrameTime = 250;
+
+        // this value stores how far we are in the current frame. For example, when the 
+        // value of alpha is 0.5, it means we are halfway between the last frame and the 
+        // next upcoming frame.
+        private float alpha = 0;
 
         public NxSim()
         {
             graphics = new GraphicsDeviceManager(this);
-            //graphics.IsFullScreen = true;
             IsFixedTimeStep = true;
-            float targetFPS = 60.0f;
-            TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0f / targetFPS);
-            Window.AllowUserResizing = true;
+            double targetFPS = 60.0d;
+            this.TargetElapsedTime = TimeSpan.FromMilliseconds(1000d / targetFPS);
+/*            Window.AllowUserResizing = true;
+            graphics.SynchronizeWithVerticalRetrace = false;*/
+            graphics.ApplyChanges();
         }
 
         /// <summary>
@@ -78,6 +91,13 @@ namespace NxSim
             // TODO: Unload any non ContentManager content here
         }
 
+        protected void FixedUpdate()
+        {
+            // TODO: Add your update logic here
+            Character.Update(this.fixedTimestep);
+
+        }
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -88,10 +108,29 @@ namespace NxSim
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            if (this.previousT == 0)
+            {
+                this.previousT = (float) gameTime.TotalGameTime.TotalMilliseconds;
+            }
+
+            float now = (float) gameTime.TotalGameTime.TotalMilliseconds;
+            float frameTime = now - this.previousT;
+            if (frameTime > this.maxFrameTime)
+            {
+                frameTime = this.maxFrameTime;
+            }
+            this.accumulator += frameTime;
+            while (this.accumulator >= this.fixedTimestep)
+            {
+                this.FixedUpdate();
+                this.accumulator -= this.fixedTimestep;
+            }
+            this.alpha = this.accumulator / this.fixedTimestep;
+            this.previousT = now;
+
+
             // TODO: Add your update logic here
-            Character.HandleInput(Keyboard.GetState());
-            Character.Update(gameTime, Keyboard.GetState());
-            Camera.Update(gameTime);
+            Character.HandleInput();
             base.Update(gameTime);
         }
 
@@ -110,8 +149,9 @@ namespace NxSim
                         null,
                         null,
                         null, Camera.Transform);
+            Camera.Update(gameTime, this.alpha);
             map.DrawMap(spriteBatch);
-            Character.Draw(spriteBatch);
+            Character.Draw(spriteBatch, this.alpha);
             spriteBatch.End();
             base.Draw(gameTime);
         }

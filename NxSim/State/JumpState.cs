@@ -18,15 +18,15 @@ namespace States
             chr.IsGrounded = false;
         }
 
-        public void HandleInput(KeyboardState kbs, Character chr)
+        public void HandleInput(Character chr, InputComponent input)
         {
-            if (kbs.IsKeyDown(Keys.Right))
+            if (input.IsHeld(Actions.WalkRight))
             {
                 chr.FacingRight = true;
                 chr.Velocity.UpdateX(chr.Velocity.X + 1);
                 return;
             }
-            else if (kbs.IsKeyDown(Keys.Left))
+            else if (input.IsHeld(Actions.WalkLeft))
             {
                 chr.FacingRight = false;
                 chr.Velocity.UpdateX(chr.Velocity.X - 1);
@@ -40,11 +40,11 @@ namespace States
             chr.IsGrounded = false;
         }
 
-        public void Update(KeyboardState keyboardState, Character chr)
+        public void Update(Character chr)
         {
             if (chr.IsGrounded)
             {
-                chr.StateHandler.Pop();
+                chr.StateHandler.Pop(chr);
             }
         }
     }

@@ -5,9 +5,9 @@ namespace States
 {
     interface ICharacterState
     {
-        void HandleInput(KeyboardState keyboardState, Character chr);
+        void HandleInput(Character chr, InputComponent input);
 
-        void Update(KeyboardState keyboardState, Character chr);
+        void Update(Character chr);
 
         void Enter(Character chr);
 

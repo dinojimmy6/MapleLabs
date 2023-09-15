@@ -14,56 +14,54 @@ namespace NxSim
         WalkRight = 1,
         Duck = 2,
         Jump = 3,
-        ClimbUp = 4,
-        ClimbDown = 5
+        ClimbUp = 4
     }
-    class Input
+    class InputComponent
     {
-        private delegate void KeyEvent();
 
         private KeyboardState LastState;
+        private KeyboardState CurrentState;
 
-        private Dictionary<Keys, KeyEvent> KeyDownMap = new();
-        private Dictionary<Keys, KeyEvent> KeyUpMap = new();
+        private readonly Dictionary<Actions, Keys> KeyBindings = new();
 
-
-        public Input()  
+        public InputComponent()  
         {
-            this.Bind();
-            this.KeyDownMap.Add(Keys.Up, WalkLeft);
-            this.KeyUpMap.Add(Keys.Up, Stop);
-            this.KeyDownMap.Add(Keys.Right, WalkRight);
-            this.KeyUpMap.Add(Keys.Up, Stop);
+            this.BindKey(Keys.Left, Actions.WalkLeft);
+            this.BindKey(Keys.Right, Actions.WalkRight);
+            this.BindKey(Keys.Down, Actions.Duck);
+            this.BindKey(Keys.Up, Actions.ClimbUp);
+            this.BindKey(Keys.Space, Actions.Jump);
         }
 
-        public void Bind()
+        public void BindKey(Keys key, Actions action)
         {
-
+            this.KeyBindings.Add(action, key);
         }
 
-        private void WalkLeft()
+        public void UnbindAction(Actions action)
         {
-
-        }
-
-        public void WalkRight()
-        {
-           
-        }
-
-        public void Stop()
-        {
-
+            this.KeyBindings.Remove(action);
         }
 
         public void Update()
         {
-            KeyboardState state = Keyboard.GetState();
-            Keys[] pressedKeys = state.GetPressedKeys();
-            Keys[] lastKeys = this.LastState.GetPressedKeys();
-            foreach (Keys key in pressedKeys) {
-                
-            }
+            this.LastState = CurrentState;
+            this.CurrentState = Keyboard.GetState();
+        }
+
+        public bool IsTriggered(Actions a)
+        {
+            return this.CurrentState.IsKeyDown(KeyBindings[a]) && this.LastState.IsKeyUp(KeyBindings[a]);
+        }
+
+        public bool IsReleased(Actions a)
+        {
+            return this.LastState.IsKeyDown(KeyBindings[a]) && this.CurrentState.IsKeyUp(KeyBindings[a]);
+        }
+
+        public bool IsHeld(Actions a)
+        {
+            return this.CurrentState.IsKeyDown(KeyBindings[a]);
         }
     }
 }

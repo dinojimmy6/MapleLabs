@@ -189,7 +189,7 @@ namespace NxSim
             get
             {
                 CharacterFrame currentFrame = null;
-                TimeSpan accumulatedTime = new TimeSpan();
+                TimeSpan accumulatedTime = new();
                 for(int i = 0; i < AnimationBooks[currentAnimation].Count; i++)
                 {
                     var delay = TimeSpan.FromMilliseconds(Skeleton.Duration[currentAnimation][i]);
@@ -203,10 +203,7 @@ namespace NxSim
                         accumulatedTime += delay;
                     }
                 }
-                if (currentFrame == null)
-                {
-                    currentFrame = AnimationBooks[currentAnimation][0];
-                }
+                currentFrame ??= AnimationBooks[currentAnimation][0];
                 return currentFrame;
             }
         }
@@ -232,11 +229,10 @@ namespace NxSim
             AnimationBooks.Add(a, AnimationBook);
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(float dT)
         {
-            double secondsIntoAnimation = timeIntoAnimation.TotalSeconds + gameTime.ElapsedGameTime.TotalSeconds;
-            double remainder = secondsIntoAnimation % Duration.TotalSeconds;
-            timeIntoAnimation = TimeSpan.FromSeconds(remainder);
+            timeIntoAnimation = timeIntoAnimation.Add(TimeSpan.FromMilliseconds(dT));
+            timeIntoAnimation = new TimeSpan(timeIntoAnimation.Ticks % Duration.Ticks);
         }
 
         public void SetAnimation(Animations a)

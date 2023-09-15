@@ -12,29 +12,23 @@ namespace States
 
         }
 
-        public void HandleInput(KeyboardState kbs, Character chr)
+        public void HandleInput(Character chr, InputComponent input)
         {
-            if (kbs.IsKeyDown(Keys.Space))
+            if (input.IsHeld(Actions.Jump))
             {
-                chr.StateHandler.Push(chr.StateHandler.jump);
+                chr.StateHandler.Push(chr.StateHandler.jump, chr);
             }
-            else if (kbs.IsKeyDown(Keys.Right) || kbs.IsKeyDown(Keys.Left))
+            else if (input.IsHeld(Actions.WalkRight) || input.IsHeld(Actions.WalkLeft))
             {
-                chr.StateHandler.Push(chr.StateHandler.walk);
-                return;
+                chr.StateHandler.Push(chr.StateHandler.walk, chr);
             }
-            else if (kbs.IsKeyDown(Keys.Down))
+            else if (input.IsHeld(Actions.Duck))
             {
-                chr.StateHandler.Push(chr.StateHandler.duck);
-                return;
-            }
-            else
-            {
-                return;
+                chr.StateHandler.Push(chr.StateHandler.duck, chr);
             }
         }
 
-        public void Update(KeyboardState kbs, Character chr)
+        public void Update(Character chr)
         {
             chr.Velocity.UpdateX((float) Math.Truncate(chr.Velocity.X * 0.1));
         }
